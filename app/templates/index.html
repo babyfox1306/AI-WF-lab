@@ -3,696 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Workflow Lab</title>
+    <title>SignalForge</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* ===== CSS Variables & Theme ===== */
         :root {
-            --bg-primary: #0a0a1a;
-            --bg-secondary: #12122a;
-            --bg-card: #1a1a3a;
-            --bg-card-hover: #22224a;
-            --bg-input: #16163a;
-            --border: #2a2a5a;
+            --bg-primary: #08081a;
+            --bg-secondary: #10102a;
+            --bg-card: #16163a;
+            --bg-card-hover: #1e1e4a;
+            --bg-input: #12123a;
+            --border: #25255a;
             --border-hover: #3a3a7a;
             --text-primary: #e8e8ff;
             --text-secondary: #9898c8;
             --text-muted: #6868a0;
             --accent: #6c5ce7;
             --accent-light: #8b7cf7;
-            --accent-glow: rgba(108, 92, 231, 0.3);
+            --accent-glow: rgba(108,92,231,0.3);
             --success: #00d2a0;
             --warning: #ffc048;
             --error: #ff6b6b;
             --info: #48b8ff;
             --radius: 12px;
             --radius-sm: 8px;
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        /* ===== Scrollbar ===== */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
-
-        /* ===== Auth Page ===== */
-        .auth-page {
-            display: flex;
-            min-height: 100vh;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(ellipse at top left, rgba(108, 92, 231, 0.1), transparent 50%),
-                        radial-gradient(ellipse at bottom right, rgba(0, 210, 160, 0.05), transparent 50%);
-            padding: 20px;
-        }
-
-        .auth-container {
-            width: 100%;
-            max-width: 440px;
-            animation: fadeUp 0.6s ease;
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .auth-logo {
-            font-size: 38px;
-            margin-bottom: 8px;
-        }
-
-        .auth-header h1 {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-light), var(--success));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .auth-header p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-top: 4px;
-        }
-
-        .auth-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 32px;
-            backdrop-filter: blur(20px);
-        }
-
-        .auth-tabs {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 24px;
-            background: var(--bg-input);
-            border-radius: var(--radius-sm);
-            padding: 4px;
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: var(--transition);
-        }
-
-        .auth-tab.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 14px;
-            transition: var(--transition);
-            outline: none;
-        }
-
-        .form-group input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
-            color: white;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 20px var(--accent-glow);
-        }
-
-        .btn-sm {
-            padding: 8px 16px;
-            font-size: 13px;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--accent);
-            color: var(--accent-light);
-        }
-
-        .btn-danger {
-            background: rgba(255, 107, 107, 0.15);
-            color: var(--error);
-            border: 1px solid rgba(255, 107, 107, 0.2);
-        }
-
-        .btn-danger:hover {
-            background: rgba(255, 107, 107, 0.25);
-        }
-
-        .btn-success {
-            background: rgba(0, 210, 160, 0.15);
-            color: var(--success);
-            border: 1px solid rgba(0, 210, 160, 0.2);
-        }
-
-        .btn-success:hover {
-            background: rgba(0, 210, 160, 0.25);
-        }
-
-        .error-msg {
-            color: var(--error);
-            font-size: 13px;
-            margin-top: 8px;
-            display: none;
-        }
-
-        .success-msg {
-            color: var(--success);
-            font-size: 13px;
-            margin-top: 8px;
-            display: none;
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        /* ===== Dashboard Layout ===== */
-        .app-layout {
-            display: none;
-            min-height: 100vh;
-        }
-
-        .app-layout.active {
-            display: flex;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            z-index: 100;
-            transition: var(--transition);
-        }
-
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 32px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .sidebar-logo {
-            font-size: 28px;
-        }
-
-        .sidebar-title {
-            font-size: 18px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-light), var(--success));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .sidebar-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-        }
-
-        .nav-item {
-            padding: 12px 16px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            border: none;
-            background: transparent;
-            width: 100%;
-            text-align: left;
-            font-family: inherit;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-card);
-            color: var(--text-primary);
-        }
-
-        .nav-item.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        .nav-icon { font-size: 18px; }
-
-        .sidebar-footer {
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px;
-            border-radius: var(--radius-sm);
-        }
-
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .user-details {
-            flex: 1;
-        }
-
-        .user-name { font-size: 14px; font-weight: 600; }
-        .user-email { font-size: 12px; color: var(--text-muted); }
-
-        .logout-btn {
-            padding: 6px;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 18px;
-            transition: var(--transition);
-        }
-
-        .logout-btn:hover { color: var(--error); }
-
-        /* Main Content */
-        .main-content {
-            margin-left: 260px;
-            flex: 1;
-            padding: 32px;
-            min-height: 100vh;
-        }
-
-        .page-header {
-            margin-bottom: 24px;
-        }
-
-        .page-header h2 {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .page-header p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-top: 4px;
-        }
-
-        .page-section { display: none; }
-        .page-section.active { display: block; animation: fadeIn 0.3s ease; }
-
-        /* ===== Stats Cards ===== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 20px;
-            transition: var(--transition);
-        }
-
-        .stat-card:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .stat-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .stat-icon.blue { background: rgba(72, 184, 255, 0.15); }
-        .stat-icon.green { background: rgba(0, 210, 160, 0.15); }
-        .stat-icon.purple { background: rgba(108, 92, 231, 0.15); }
-        .stat-icon.red { background: rgba(255, 107, 107, 0.15); }
-
-        .stat-label { font-size: 13px; color: var(--text-muted); }
-        .stat-value { font-size: 28px; font-weight: 700; }
-
-        /* ===== Tables & Lists ===== */
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 24px;
-            margin-bottom: 16px;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .card-header h3 {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-        }
-
-        .empty-state-icon { font-size: 48px; margin-bottom: 12px; }
-        .empty-state p { font-size: 14px; }
-
-        .item-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .item-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 16px;
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            transition: var(--transition);
-        }
-
-        .item-row:hover {
-            border-color: var(--border-hover);
-        }
-
-        .item-info { flex: 1; }
-        .item-title { font-size: 14px; font-weight: 500; }
-        .item-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-        .item-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        /* ===== Status Badges ===== */
-        .badge {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            display: inline-block;
-        }
-
-        .badge-draft { background: rgba(104, 104, 160, 0.2); color: var(--text-muted); }
-        .badge-running { background: rgba(72, 184, 255, 0.15); color: var(--info); }
-        .badge-completed { background: rgba(0, 210, 160, 0.15); color: var(--success); }
-        .badge-failed { background: rgba(255, 107, 107, 0.15); color: var(--error); }
-        .badge-pending { background: rgba(255, 192, 72, 0.15); color: var(--warning); }
-
-        /* ===== Modal ===== */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.active { display: flex; }
-
-        .modal {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 32px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            animation: fadeUp 0.3s ease;
-        }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h3 { font-size: 18px; }
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 24px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .modal-close:hover { color: var(--text-primary); }
-
-        /* ===== Logs ===== */
-        .log-entry {
-            padding: 10px 12px;
-            border-left: 3px solid var(--border);
-            margin-bottom: 4px;
-            font-size: 13px;
-            font-family: 'Consolas', 'Monaco', monospace;
-            background: var(--bg-input);
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-        }
-
-        .log-entry.info { border-left-color: var(--info); }
-        .log-entry.warning { border-left-color: var(--warning); }
-        .log-entry.error { border-left-color: var(--error); }
-
-        .log-level {
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 11px;
-            margin-right: 8px;
-        }
-
-        .log-level.info { color: var(--info); }
-        .log-level.warning { color: var(--warning); }
-        .log-level.error { color: var(--error); }
-
-        /* ===== Toast ===== */
-        .toast {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            padding: 14px 20px;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 500;
-            z-index: 2000;
-            display: none;
-            animation: slideIn 0.3s ease;
-            max-width: 400px;
-        }
-
-        .toast.success { background: rgba(0, 210, 160, 0.9); color: white; display: block; }
-        .toast.error { background: rgba(255, 107, 107, 0.9); color: white; display: block; }
-        .toast.info { background: rgba(72, 184, 255, 0.9); color: white; display: block; }
-
-        /* ===== Activity Timeline ===== */
-        .activity-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .activity-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px;
-            background: var(--bg-input);
-            border-radius: var(--radius-sm);
-        }
-
-        .activity-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-top: 6px;
-            flex-shrink: 0;
-        }
-
-        .activity-dot.info { background: var(--info); }
-        .activity-dot.warning { background: var(--warning); }
-        .activity-dot.error { background: var(--error); }
-
-        .activity-text { font-size: 13px; }
-        .activity-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
-        /* ===== Animations ===== */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-        /* ===== Loading Spinner ===== */
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--border);
-            border-top: 2px solid var(--accent);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            display: inline-block;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ===== Responsive ===== */
-        @media (max-width: 768px) {
-            .sidebar { width: 100%; position: relative; }
-            .main-content { margin-left: 0; }
-            .app-layout.active { flex-direction: column; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-        }
-
-        @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .modal { padding: 20px; }
-        }
-
-        /* JSON display */
-        .json-display {
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 12px;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 12px;
-            overflow-x: auto;
-            max-height: 200px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            color: var(--text-secondary);
+            --shadow: 0 4px 24px rgba(0,0,0,0.3);
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;line-height:1.6}
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:var(--bg-secondary)}
+        ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+        ::-webkit-scrollbar-thumb:hover{background:var(--border-hover)}
+
+        .auth-page{display:flex;min-height:100vh;align-items:center;justify-content:center;background:radial-gradient(ellipse at top left,rgba(108,92,231,0.12),transparent 50%),radial-gradient(ellipse at bottom right,rgba(0,210,160,0.08),transparent 50%);padding:20px}
+        .auth-container{width:100%;max-width:440px;animation:fadeUp 0.6s ease}
+        .auth-header{text-align:center;margin-bottom:32px}
+        .auth-logo{font-size:42px;margin-bottom:8px}
+        .auth-header h1{font-size:28px;font-weight:800;background:linear-gradient(135deg,#8b7cf7,#00d2a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .auth-header p{color:var(--text-secondary);font-size:14px;margin-top:4px}
+        .auth-version{font-size:11px;color:var(--text-muted);margin-top:2px}
+        .auth-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;backdrop-filter:blur(20px)}
+        .auth-tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--bg-input);border-radius:var(--radius-sm);padding:4px}
+        .auth-tab{flex:1;padding:10px;text-align:center;border:none;background:transparent;color:var(--text-muted);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;border-radius:6px;transition:var(--transition)}
+        .auth-tab.active{background:var(--accent);color:#fff}
+        .form-group{margin-bottom:16px}
+        .form-group label{display:block;font-size:13px;font-weight:500;color:var(--text-secondary);margin-bottom:6px}
+        .form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 16px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:inherit;font-size:14px;transition:var(--transition);outline:none}
+        .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+        .form-group textarea{resize:vertical;min-height:80px}
+        .form-group select{cursor:pointer}
+        .form-group select option{background:var(--bg-card)}
+        .btn{padding:12px 24px;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:8px}
+        .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-light));color:#fff;width:100%;justify-content:center}
+        .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 20px var(--accent-glow)}
+        .btn-sm{padding:8px 16px;font-size:13px}
+        .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-secondary)}
+        .btn-outline:hover{border-color:var(--accent);color:var(--accent-light)}
+        .btn-danger{background:rgba(255,107,107,0.15);color:var(--error);border:1px solid rgba(255,107,107,0.2)}
+        .btn-danger:hover{background:rgba(255,107,107,0.25)}
+        .btn-success{background:rgba(0,210,160,0.15);color:var(--success);border:1px solid rgba(0,210,160,0.2)}
+        .btn-success:hover{background:rgba(0,210,160,0.25)}
+        .btn-warning{background:rgba(255,192,72,0.15);color:var(--warning);border:1px solid rgba(255,192,72,0.2)}
+        .btn-warning:hover{background:rgba(255,192,72,0.25)}
+        .error-msg{color:var(--error);font-size:13px;margin-top:8px;display:none}
+        .success-msg{color:var(--success);font-size:13px;margin-top:8px;display:none}
+        .auth-form{display:none}
+        .auth-form.active{display:block;animation:fadeIn 0.3s ease}
+
+        .app-layout{display:none;min-height:100vh}
+        .app-layout.active{display:flex}
+
+        .sidebar{width:260px;background:var(--bg-secondary);border-right:1px solid var(--border);padding:24px;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:var(--transition)}
+        .sidebar-header{display:flex;align-items:center;gap:12px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+        .sidebar-logo{font-size:30px}
+        .sidebar-title{font-size:16px;font-weight:700;background:linear-gradient(135deg,#8b7cf7,#00d2a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .sidebar-subtitle{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:-2px}
+        .sidebar-nav{display:flex;flex-direction:column;gap:2px;flex:1;overflow-y:auto}
+        .sidebar-nav::-webkit-scrollbar{width:3px}
+        .nav-section{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);padding:16px 16px 6px;font-weight:600}
+        .nav-item{padding:10px 16px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:var(--text-secondary);border:none;background:transparent;width:100%;text-align:left;font-family:inherit}
+        .nav-item:hover{background:var(--bg-card);color:var(--text-primary)}
+        .nav-item.active{background:var(--accent);color:#fff}
+        .nav-item .badge{font-size:10px;padding:1px 6px;margin-left:auto}
+        .nav-icon{font-size:16px;width:20px;text-align:center}
+        .sidebar-footer{padding-top:12px;border-top:1px solid var(--border);margin-top:auto}
+        .user-info{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:var(--radius-sm)}
+        .user-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;flex-shrink:0}
+        .user-details{flex:1;min-width:0}
+        .user-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .user-email{font-size:11px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .logout-btn{padding:6px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;font-size:16px;transition:var(--transition)}
+        .logout-btn:hover{color:var(--error)}
+
+        .main-content{margin-left:260px;flex:1;padding:32px;min-height:100vh;max-width:100%}
+        .page-header{margin-bottom:24px}
+        .page-header h2{font-size:22px;font-weight:700}
+        .page-header p{color:var(--text-secondary);font-size:14px;margin-top:2px}
+        .page-section{display:none}
+        .page-section.active{display:block;animation:fadeIn 0.3s ease}
+
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+        .stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;transition:var(--transition)}
+        .stat-card:hover{border-color:var(--border-hover);transform:translateY(-2px);box-shadow:var(--shadow)}
+        .stat-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+        .stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+        .stat-icon.purple{background:rgba(108,92,231,0.15)}
+        .stat-icon.blue{background:rgba(72,184,255,0.15)}
+        .stat-icon.green{background:rgba(0,210,160,0.15)}
+        .stat-icon.red{background:rgba(255,107,107,0.15)}
+        .stat-icon.orange{background:rgba(255,192,72,0.15)}
+        .stat-label{font-size:12px;color:var(--text-muted)}
+        .stat-value{font-size:24px;font-weight:700}
+        .stat-detail{font-size:11px;color:var(--text-muted);margin-top:2px}
+
+        .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px}
+        .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+        .card-header h3{font-size:15px;font-weight:600}
+        .card-header .btn{padding:7px 14px;font-size:12px;width:auto}
+        .empty-state{text-align:center;padding:40px 20px;color:var(--text-muted)}
+        .empty-state-icon{font-size:40px;margin-bottom:10px;opacity:0.5}
+        .empty-state p{font-size:13px}
+        .item-list{display:flex;flex-direction:column;gap:6px}
+        .item-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);transition:var(--transition);gap:12px;flex-wrap:wrap}
+        .item-row:hover{border-color:var(--border-hover)}
+        .item-info{flex:1;min-width:0}
+        .item-title{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .item-meta{font-size:11px;color:var(--text-muted);margin-top:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+        .item-actions{display:flex;gap:6px;flex-shrink:0}
+        .item-actions .btn{padding:5px 10px;font-size:11px;width:auto}
+
+        .badge{padding:3px 8px;border-radius:20px;font-size:11px;font-weight:500;display:inline-block}
+        .badge-draft{background:rgba(104,104,160,0.2);color:var(--text-muted)}
+        .badge-queued,.badge-pending{background:rgba(104,104,160,0.2);color:var(--text-muted)}
+        .badge-running{background:rgba(72,184,255,0.15);color:var(--info)}
+        .badge-completed{background:rgba(0,210,160,0.15);color:var(--success)}
+        .badge-failed{background:rgba(255,107,107,0.15);color:var(--error)}
+        .badge-awaiting-approval,.badge-awaiting_approval{background:rgba(255,192,72,0.15);color:var(--warning)}
+        .badge-cancelled{background:rgba(104,104,160,0.1);color:var(--text-muted)}
+        .badge-approved{background:rgba(0,210,160,0.15);color:var(--success)}
+        .badge-rejected{background:rgba(255,107,107,0.15);color:var(--error)}
+        .badge-ready{background:rgba(108,92,231,0.15);color:var(--accent-light)}
+
+        .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center;padding:20px}
+        .modal-overlay.active{display:flex}
+        .modal{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:90%;max-width:560px;max-height:85vh;overflow-y:auto;animation:fadeUp 0.3s ease}
+        .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+        .modal-header h3{font-size:17px}
+        .modal-close{background:none;border:none;color:var(--text-muted);font-size:22px;cursor:pointer;transition:var(--transition);padding:4px}
+        .modal-close:hover{color:var(--text-primary)}
+
+        .log-entry{padding:8px 10px;border-left:3px solid var(--border);margin-bottom:3px;font-size:12px;font-family:Consolas,Monaco,monospace;background:var(--bg-input);border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+        .log-entry.info{border-left-color:var(--info)}
+        .log-entry.warning{border-left-color:var(--warning)}
+        .log-entry.error{border-left-color:var(--error)}
+        .log-level{font-weight:600;text-transform:uppercase;font-size:10px;margin-right:6px}
+        .log-level.info{color:var(--info)}
+        .log-level.warning{color:var(--warning)}
+        .log-level.error{color:var(--error)}
+
+        .toast{position:fixed;top:20px;right:20px;padding:12px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;z-index:2000;display:none;animation:slideIn 0.3s ease;max-width:400px;box-shadow:var(--shadow)}
+        .toast.success{background:rgba(0,210,160,0.95);color:#fff;display:block}
+        .toast.error{background:rgba(255,107,107,0.95);color:#fff;display:block}
+        .toast.info{background:rgba(72,184,255,0.95);color:#fff;display:block}
+
+        .activity-list{display:flex;flex-direction:column;gap:6px}
+        .activity-item{display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--bg-input);border-radius:var(--radius-sm)}
+        .activity-dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+        .activity-dot.info{background:var(--info)}
+        .activity-dot.warning{background:var(--warning)}
+        .activity-dot.error{background:var(--error)}
+        .activity-dot.success{background:var(--success)}
+        .activity-text{font-size:12px}
+        .activity-time{font-size:10px;color:var(--text-muted);margin-top:1px}
+
+        .json-display{background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;font-family:Consolas,Monaco,monospace;font-size:11px;overflow:auto;max-height:200px;white-space:pre-wrap;color:var(--text-secondary)}
+
+        .tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg-input);border-radius:var(--radius-sm);padding:3px;flex-wrap:wrap}
+        .tab{flex:1;padding:8px 14px;text-align:center;border:none;background:transparent;color:var(--text-muted);font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;border-radius:5px;transition:var(--transition);min-width:80px}
+        .tab.active{background:var(--accent);color:#fff}
+
+        .spinner{width:18px;height:18px;border:2px solid var(--border);border-top:2px solid var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px}
+
+        .node-list{display:flex;flex-direction:column;gap:4px}
+        .node-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px}
+        .node-key{font-weight:600;color:var(--accent-light);min-width:80px}
+        .node-type{color:var(--text-muted);font-size:11px;min-width:60px}
+        .node-duration{color:var(--text-muted);font-size:11px;margin-left:auto}
+
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+
+        @media(max-width:768px){
+            .sidebar{width:100%;position:relative;height:auto;padding:16px}
+            .main-content{margin-left:0;padding:16px}
+            .app-layout.active{flex-direction:column}
+            .stats-grid{grid-template-columns:1fr 1fr}
+            .sidebar-nav{flex-direction:row;flex-wrap:wrap;overflow-x:auto}
+            .nav-section{display:none}
+            .nav-item{font-size:12px;padding:8px 12px;white-space:nowrap}
+            .sidebar-footer{display:none}
+        }
+        @media(max-width:480px){
+            .stats-grid{grid-template-columns:1fr}
+            .modal{padding:20px}
+            .item-actions{width:100%;justify-content:flex-end}
         }
     </style>
 </head>
 <body>
-    <!-- ===== Toast ===== -->
     <div id="toast" class="toast"></div>
-
-    <!-- ===== Modal ===== -->
     <div id="modalOverlay" class="modal-overlay">
         <div class="modal" id="modalContent">
             <div class="modal-header">
@@ -703,21 +225,20 @@
         </div>
     </div>
 
-    <!-- ===== Auth Page ===== -->
+    <!-- Auth Page -->
     <div id="authPage" class="auth-page">
         <div class="auth-container">
             <div class="auth-header">
-                <div class="auth-logo">🤖</div>
-                <h1>AI Workflow Lab</h1>
-                <p>Create &amp; monitor AI workflows</p>
+                <div class="auth-logo">🧠</div>
+                <h1>SignalForge</h1>
+                <p>AI Opportunity Intelligence Factory</p>
+                <div class="auth-version">v2.0.0</div>
             </div>
             <div class="auth-card">
                 <div class="auth-tabs">
                     <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
                     <button class="auth-tab" onclick="switchAuthTab('register')">Register</button>
                 </div>
-
-                <!-- Login Form -->
                 <div id="loginForm" class="auth-form active">
                     <div class="form-group">
                         <label>Email</label>
@@ -730,8 +251,6 @@
                     <button class="btn btn-primary" onclick="login()">Sign In</button>
                     <div id="loginError" class="error-msg"></div>
                 </div>
-
-                <!-- Register Form -->
                 <div id="registerForm" class="auth-form">
                     <div class="form-group">
                         <label>Email</label>
@@ -753,18 +272,49 @@
         </div>
     </div>
 
-    <!-- ===== App Layout ===== -->
+    <!-- App Layout -->
     <div id="appLayout" class="app-layout">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <span class="sidebar-logo">🤖</span>
-                <span class="sidebar-title">AI Workflow Lab</span>
+                <span class="sidebar-logo">🧠</span>
+                <div>
+                    <div class="sidebar-title">SignalForge</div>
+                    <div class="sidebar-subtitle">Intelligence Factory</div>
+                </div>
             </div>
             <nav class="sidebar-nav">
+                <div class="nav-section">Overview</div>
                 <button class="nav-item active" onclick="navigateTo('dashboard')">
                     <span class="nav-icon">📊</span> Dashboard
                 </button>
+
+                <div class="nav-section">Analysis</div>
+                <button class="nav-item" onclick="navigateTo('projects')">
+                    <span class="nav-icon">🎯</span> Projects
+                    <span class="badge badge-running" id="projectBadge" style="display:none">0</span>
+                </button>
+
+                <div class="nav-section">Configuration</div>
+                <button class="nav-item" onclick="navigateTo('providers')">
+                    <span class="nav-icon">🔌</span> Providers
+                </button>
+                <button class="nav-item" onclick="navigateTo('agents')">
+                    <span class="nav-icon">🤖</span> Agents
+                </button>
+
+                <div class="nav-section">Pipeline</div>
+                <button class="nav-item" onclick="navigateTo('templates')">
+                    <span class="nav-icon">📋</span> Templates
+                </button>
+                <button class="nav-item" onclick="navigateTo('executions')">
+                    <span class="nav-icon">🔄</span> Executions
+                </button>
+                <button class="nav-item" onclick="navigateTo('approvals')">
+                    <span class="nav-icon">✅</span> Approvals
+                    <span class="badge badge-awaiting-approval" id="approvalBadge" style="display:none">0</span>
+                </button>
+
+                <div class="nav-section">Legacy</div>
                 <button class="nav-item" onclick="navigateTo('workspaces')">
                     <span class="nav-icon">📁</span> Workspaces
                 </button>
@@ -787,44 +337,77 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Dashboard Page -->
+            <!-- Dashboard -->
             <div id="pageDashboard" class="page-section active">
                 <div class="page-header">
                     <h2>Dashboard</h2>
-                    <p>Overview of your AI workflow lab</p>
+                    <p>SignalForge intelligence overview</p>
                 </div>
                 <div class="stats-grid" id="statsGrid">
                     <div class="stat-card">
                         <div class="stat-header">
-                            <span class="stat-label">Total Workflows</span>
-                            <div class="stat-icon purple">⚡</div>
+                            <span class="stat-label">Projects</span>
+                            <div class="stat-icon purple">🎯</div>
                         </div>
-                        <div class="stat-value" id="totalWorkflows">-</div>
+                        <div class="stat-value" id="totalProjects">-</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
-                            <span class="stat-label">Running Jobs</span>
+                            <span class="stat-label">Executions</span>
                             <div class="stat-icon blue">🔄</div>
                         </div>
-                        <div class="stat-value" id="runningJobs">-</div>
+                        <div class="stat-value" id="totalExecutions">-</div>
+                        <div class="stat-detail" id="activeExecutions"></div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
                             <span class="stat-label">Completed</span>
                             <div class="stat-icon green">✅</div>
                         </div>
-                        <div class="stat-value" id="completedJobs">-</div>
+                        <div class="stat-value" id="completedExecutions">-</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
-                            <span class="stat-label">Failed</span>
-                            <div class="stat-icon red">❌</div>
+                            <span class="stat-label">Pending Approval</span>
+                            <div class="stat-icon orange">⏳</div>
                         </div>
-                        <div class="stat-value" id="failedJobs">-</div>
+                        <div class="stat-value" id="pendingApprovals">-</div>
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Active Executions</h3>
+                        <button class="btn btn-sm btn-outline" onclick="navigateTo('executions')">View All</button>
+                    </div>
+                    <div id="activeExecutionList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔄</div>
+                            <p>No active executions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                    <div>
+                        <div class="card-header"><h3>Quick Actions</h3></div>
+                        <div style="display:flex;flex-direction:column;gap:8px">
+                            <button class="btn btn-sm btn-primary" onclick="navigateTo('projects')" style="width:auto;padding:10px 16px">+ New Project</button>
+                            <button class="btn btn-sm btn-outline" onclick="navigateTo('providers')" style="width:auto;padding:10px 16px">🔌 Configure Provider</button>
+                            <button class="btn btn-sm btn-outline" onclick="navigateTo('approvals')" style="width:auto;padding:10px 16px">✅ Review Approvals</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card-header"><h3>System Status</h3></div>
+                        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+                            <div>API: <span style="color:var(--success)">● Online</span></div>
+                            <div>Database: <span style="color:var(--success)">● Connected</span></div>
+                            <div>Worker: <span id="workerStatus" style="color:var(--text-muted)">○ Unknown</span></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-header">
                         <h3>Recent Activity</h3>
@@ -832,13 +415,136 @@
                     <div id="recentActivity">
                         <div class="empty-state">
                             <div class="empty-state-icon">📋</div>
-                            <p>No activity yet. Create a workflow and run some jobs!</p>
+                            <p>No activity yet</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Workspaces Page -->
+            <!-- Projects -->
+            <div id="pageProjects" class="page-section">
+                <div class="page-header">
+                    <h2>Projects</h2>
+                    <p>AI opportunity analysis projects</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>All Projects</h3>
+                        <div style="display:flex;gap:6px">
+                            <button class="btn btn-sm btn-primary" onclick="showCreateProjectModal()">+ New Project</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Filter by Workspace</label>
+                        <select id="projectWorkspaceFilter" onchange="loadProjects()">
+                            <option value="">All Workspaces</option>
+                        </select>
+                    </div>
+                    <div id="projectList" style="margin-top:12px">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🎯</div>
+                            <p>No projects yet. Create your first opportunity assessment!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Providers -->
+            <div id="pageProviders" class="page-section">
+                <div class="page-header">
+                    <h2>Providers</h2>
+                    <p>Manage LLM provider connections</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>All Providers</h3>
+                        <button class="btn btn-sm btn-primary" onclick="showCreateProviderModal()">+ Add Provider</button>
+                    </div>
+                    <div id="providerList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔌</div>
+                            <p>No providers configured. Add your first LLM provider.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agents -->
+            <div id="pageAgents" class="page-section">
+                <div class="page-header">
+                    <h2>Agents</h2>
+                    <p>Reusable AI agent definitions</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Agent Registry</h3>
+                        <button class="btn btn-sm btn-primary" onclick="showCreateAgentModal()">+ New Agent</button>
+                    </div>
+                    <div id="agentList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🤖</div>
+                            <p>No agents defined yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Templates -->
+            <div id="pageTemplates" class="page-section">
+                <div class="page-header">
+                    <h2>Pipeline Templates</h2>
+                    <p>Reusable analysis pipeline definitions</p>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3>Available Templates</h3></div>
+                    <div id="templateList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <p>No pipeline templates available.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Executions -->
+            <div id="pageExecutions" class="page-section">
+                <div class="page-header">
+                    <h2>Executions</h2>
+                    <p>Pipeline execution history</p>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3>All Executions</h3></div>
+                    <div id="executionList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔄</div>
+                            <p>No executions yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approvals -->
+            <div id="pageApprovals" class="page-section">
+                <div class="page-header">
+                    <h2>Approvals</h2>
+                    <p>Human approval queue</p>
+                </div>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchApprovalTab('pending')">Pending</button>
+                    <button class="tab" onclick="switchApprovalTab('resolved')">Resolved</button>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3 id="approvalTitle">Pending Approvals</h3></div>
+                    <div id="approvalList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">✅</div>
+                            <p>No pending approvals</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workspaces (Legacy) -->
             <div id="pageWorkspaces" class="page-section">
                 <div class="page-header">
                     <h2>Workspaces</h2>
@@ -847,7 +553,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>All Workspaces</h3>
-                        <button class="btn btn-primary btn-sm" onclick="showCreateWorkspaceModal()">+ New Workspace</button>
+                        <button class="btn btn-sm btn-primary" onclick="showCreateWorkspaceModal()">+ New Workspace</button>
                     </div>
                     <div id="workspaceList">
                         <div class="empty-state">
@@ -858,7 +564,7 @@
                 </div>
             </div>
 
-            <!-- Workflows Page -->
+            <!-- Workflows (Legacy) -->
             <div id="pageWorkflows" class="page-section">
                 <div class="page-header">
                     <h2>Workflows</h2>
@@ -867,15 +573,15 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>Workflows</h3>
-                        <button class="btn btn-primary btn-sm" onclick="showCreateWorkflowModal()">+ New Workflow</button>
+                        <button class="btn btn-sm btn-primary" onclick="showCreateWorkflowModal()">+ New Workflow</button>
                     </div>
                     <div class="form-group">
                         <label>Select Workspace</label>
-                        <select id="workflowWorkspaceSelect" style="width:100%;padding:10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:inherit;" onchange="loadWorkflows()">
+                        <select id="workflowWorkspaceSelect" onchange="loadWorkflows()">
                             <option value="">-- Select a workspace --</option>
                         </select>
                     </div>
-                    <div id="workflowList" style="margin-top:16px;">
+                    <div id="workflowList" style="margin-top:12px">
                         <div class="empty-state">
                             <div class="empty-state-icon">⚡</div>
                             <p>Select a workspace to view workflows</p>
@@ -884,7 +590,7 @@
                 </div>
             </div>
 
-            <!-- Jobs Page -->
+            <!-- Jobs (Legacy) -->
             <div id="pageJobs" class="page-section">
                 <div class="page-header">
                     <h2>Jobs</h2>
@@ -893,21 +599,21 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>Job Runs</h3>
-                        <button class="btn btn-primary btn-sm" onclick="showCreateJobModal()">+ New Job</button>
+                        <button class="btn btn-sm btn-primary" onclick="showCreateJobModal()">+ New Job</button>
                     </div>
                     <div class="form-group">
                         <label>Select Workspace</label>
-                        <select id="jobWorkspaceSelect" style="width:100%;padding:10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:inherit;" onchange="loadJobWorkflows()">
+                        <select id="jobWorkspaceSelect" onchange="loadJobWorkflows()">
                             <option value="">-- Select a workspace --</option>
                         </select>
                     </div>
-                    <div class="form-group" style="margin-top:12px;">
+                    <div class="form-group" style="margin-top:8px">
                         <label>Select Workflow</label>
-                        <select id="jobWorkflowSelect" style="width:100%;padding:10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:inherit;" onchange="loadJobs()">
+                        <select id="jobWorkflowSelect" onchange="loadJobs()">
                             <option value="">-- Select a workflow --</option>
                         </select>
                     </div>
-                    <div id="jobList" style="margin-top:16px;">
+                    <div id="jobList" style="margin-top:12px">
                         <div class="empty-state">
                             <div class="empty-state-icon">🔄</div>
                             <p>Select a workspace and workflow to view jobs</p>
@@ -919,587 +625,934 @@
     </div>
 
     <script>
-        // ===== State =====
+        const API_BASE = '';
         let TOKEN = localStorage.getItem('token') || '';
         let USER = null;
         let WORKSPACES = [];
-        let WORKFLOWS = [];
-        let CURRENT_PAGE = 'dashboard';
+        let APPROVAL_MODE = 'pending';
 
-        // ===== API Helper =====
-        const API_BASE = '';
-
-        async function api(method, path, body = null) {
-            const opts = {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-            if (TOKEN) {
-                opts.headers['Authorization'] = `Bearer ${TOKEN}`;
+        async function api(method, path, body=null){
+            const opts={method,headers:{'Content-Type':'application/json'}};
+            if(TOKEN) opts.headers['Authorization']=`Bearer ${TOKEN}`;
+            if(body) opts.body=JSON.stringify(body);
+            const resp=await fetch(`${API_BASE}${path}`,opts);
+            if(resp.status===204) return {status:204,data:null};
+            const text=await resp.text();
+            let data=null;
+            try{data=JSON.parse(text)}catch(e){}
+            if(!resp.ok){
+                const msg=data&&data.detail?typeof data.detail==='string'?data.detail:JSON.stringify(data.detail):`HTTP ${resp.status}`;
+                throw new Error(msg);
             }
-            if (body) {
-                opts.body = JSON.stringify(body);
-            }
-            const resp = await fetch(`${API_BASE}${path}`, opts);
-            const data = method === 'DELETE' || resp.status === 204 ? null : await resp.json();
-            if (!resp.ok && data && data.detail) {
-                throw new Error(typeof data.detail === 'string' ? data.detail : 'Request failed');
-            }
-            return { status: resp.status, data };
+            return {status:resp.status,data};
         }
 
-        // ===== Toast =====
-        function showToast(msg, type = 'info') {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.className = `toast ${type}`;
-            t.style.display = 'block';
-            setTimeout(() => { t.style.display = 'none'; }, 3000);
+        function showToast(msg,type='info'){
+            const t=document.getElementById('toast');
+            t.textContent=msg;
+            t.className=`toast ${type}`;
+            t.style.display='block';
+            setTimeout(()=>{t.style.display='none'},3500);
         }
 
-        // ===== Modal =====
-        function openModal(title, html) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalBody').innerHTML = html;
+        function openModal(title,html){
+            document.getElementById('modalTitle').textContent=title;
+            document.getElementById('modalBody').innerHTML=html;
             document.getElementById('modalOverlay').classList.add('active');
         }
-
-        function closeModal() {
+        function closeModal(){
             document.getElementById('modalOverlay').classList.remove('active');
         }
-
-        // Close modal on overlay click
-        document.getElementById('modalOverlay').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
+        document.getElementById('modalOverlay').addEventListener('click',function(e){
+            if(e.target===this) closeModal();
         });
 
-        // ===== Auth =====
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            if (tab === 'login') {
+        function switchAuthTab(tab){
+            document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
+            if(tab==='login'){
                 document.querySelector('.auth-tab:first-child').classList.add('active');
                 document.getElementById('loginForm').classList.add('active');
-            } else {
+            }else{
                 document.querySelector('.auth-tab:last-child').classList.add('active');
                 document.getElementById('registerForm').classList.add('active');
             }
-            document.getElementById('loginError').style.display = 'none';
-            document.getElementById('registerError').style.display = 'none';
-            document.getElementById('registerSuccess').style.display = 'none';
+            ['loginError','registerError','registerSuccess'].forEach(id=>document.getElementById(id).style.display='none');
         }
 
-        async function register() {
-            const email = document.getElementById('regEmail').value;
-            const username = document.getElementById('regUsername').value;
-            const password = document.getElementById('regPassword').value;
-            const errEl = document.getElementById('registerError');
-            const successEl = document.getElementById('registerSuccess');
-            errEl.style.display = 'none';
-            successEl.style.display = 'none';
-
-            if (!email || !username || !password) {
-                errEl.textContent = 'All fields are required';
-                errEl.style.display = 'block';
-                return;
-            }
-            if (password.length < 6) {
-                errEl.textContent = 'Password must be at least 6 characters';
-                errEl.style.display = 'block';
-                return;
-            }
-
-            try {
-                await api('POST', '/auth/register', { email, username, password });
-                successEl.textContent = 'Account created! You can now login.';
-                successEl.style.display = 'block';
-                document.getElementById('loginEmail').value = email;
+        async function register(){
+            const email=document.getElementById('regEmail').value;
+            const username=document.getElementById('regUsername').value;
+            const password=document.getElementById('regPassword').value;
+            const errEl=document.getElementById('registerError');
+            const successEl=document.getElementById('registerSuccess');
+            errEl.style.display='none';successEl.style.display='none';
+            if(!email||!username||!password){errEl.textContent='All fields are required';errEl.style.display='block';return}
+            if(password.length<6){errEl.textContent='Password must be at least 6 characters';errEl.style.display='block';return}
+            try{
+                await api('POST','/auth/register',{email,username,password});
+                successEl.textContent='Account created! You can now login.';
+                successEl.style.display='block';
+                document.getElementById('loginEmail').value=email;
                 switchAuthTab('login');
-            } catch (e) {
-                errEl.textContent = e.message;
-                errEl.style.display = 'block';
-            }
+            }catch(e){errEl.textContent=e.message;errEl.style.display='block'}
         }
 
-        async function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const errEl = document.getElementById('loginError');
-            errEl.style.display = 'none';
-
-            if (!email || !password) {
-                errEl.textContent = 'Email and password are required';
-                errEl.style.display = 'block';
-                return;
-            }
-
-            try {
-                const { data } = await api('POST', '/auth/login', { email, password });
-                TOKEN = data.access_token;
-                localStorage.setItem('token', TOKEN);
+        async function login(){
+            const email=document.getElementById('loginEmail').value;
+            const password=document.getElementById('loginPassword').value;
+            const errEl=document.getElementById('loginError');
+            errEl.style.display='none';
+            if(!email||!password){errEl.textContent='Email and password are required';errEl.style.display='block';return}
+            try{
+                const {data}=await api('POST','/auth/login',{email,password});
+                TOKEN=data.access_token;
+                localStorage.setItem('token',TOKEN);
                 await loadUser();
-                showToast('Welcome back!', 'success');
-            } catch (e) {
-                errEl.textContent = e.message;
-                errEl.style.display = 'block';
-            }
+                showToast('Welcome to SignalForge!','success');
+            }catch(e){errEl.textContent=e.message;errEl.style.display='block'}
         }
 
-        function logout() {
-            TOKEN = '';
-            localStorage.removeItem('token');
-            USER = null;
-            document.getElementById('authPage').style.display = 'flex';
+        function logout(){
+            TOKEN='';localStorage.removeItem('token');USER=null;
+            document.getElementById('authPage').style.display='flex';
             document.getElementById('appLayout').classList.remove('active');
-            showToast('Logged out', 'info');
+            showToast('Logged out','info');
         }
 
-        async function loadUser() {
-            try {
-                const { data } = await api('GET', '/users/me');
-                USER = data;
-                document.getElementById('userName').textContent = data.username;
-                document.getElementById('userEmail').textContent = data.email;
-                document.getElementById('userAvatar').textContent = data.username.charAt(0).toUpperCase();
-                document.getElementById('authPage').style.display = 'none';
+        async function loadUser(){
+            try{
+                const {data}=await api('GET','/users/me');
+                USER=data;
+                document.getElementById('userName').textContent=data.username;
+                document.getElementById('userEmail').textContent=data.email;
+                document.getElementById('userAvatar').textContent=data.username.charAt(0).toUpperCase();
+                document.getElementById('authPage').style.display='none';
                 document.getElementById('appLayout').classList.add('active');
-                await loadDashboard();
-                await loadSidebarData();
-            } catch (e) {
-                logout();
-            }
+                await Promise.all([loadDashboard(),loadSidebarData()]);
+            }catch(e){logout()}
         }
 
-        // ===== Navigation =====
-        function navigateTo(page) {
-            CURRENT_PAGE = page;
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+        async function loadSidebarData(){
+            try{
+                const {data}=await api('GET','/workspaces/');
+                WORKSPACES=data;
+            }catch(e){}
+        }
 
-            const navMap = { dashboard: 0, workspaces: 1, workflows: 2, jobs: 3 };
+        function navigateTo(page){
+            document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+            document.querySelectorAll('.page-section').forEach(p=>p.classList.remove('active'));
+            const navMap={dashboard:0,projects:1,providers:2,agents:3,templates:4,executions:5,approvals:6,workspaces:7,workflows:8,jobs:9};
             document.querySelectorAll('.nav-item')[navMap[page]].classList.add('active');
-            document.getElementById(`page${page.charAt(0).toUpperCase() + page.slice(1)}`).classList.add('active');
-
-            switch (page) {
-                case 'dashboard': loadDashboard(); break;
-                case 'workspaces': loadWorkspaces(); break;
-                case 'workflows': loadWorkspaceDropdown('workflow'); break;
-                case 'jobs': loadWorkspaceDropdown('job'); break;
-            }
-        }
-
-        // ===== Sidebar Data =====
-        async function loadSidebarData() {
-            try {
-                const { data } = await api('GET', '/workspaces/');
-                WORKSPACES = data;
-            } catch (e) {}
+            document.getElementById('page'+page.charAt(0).toUpperCase()+page.slice(1)).classList.add('active');
+            const loaders={
+                dashboard:()=>{loadDashboard()},
+                projects:()=>{loadProjects()},
+                providers:()=>{loadProviders()},
+                agents:()=>{loadAgents()},
+                templates:()=>{loadTemplates()},
+                executions:()=>{loadExecutions()},
+                approvals:()=>{loadApprovals()},
+                workspaces:()=>{loadWorkspaces()},
+                workflows:()=>{loadWorkspaceDropdown('workflow')},
+                jobs:()=>{loadWorkspaceDropdown('job')}
+            };
+            if(loaders[page]) loaders[page]();
         }
 
         // ===== Dashboard =====
-        async function loadDashboard() {
-            try {
-                const { data } = await api('GET', '/dashboard/');
-                document.getElementById('totalWorkflows').textContent = data.total_workflows;
-                document.getElementById('runningJobs').textContent = data.running_jobs;
-                document.getElementById('completedJobs').textContent = data.completed_jobs;
-                document.getElementById('failedJobs').textContent = data.failed_jobs;
+        async function loadDashboard(){
+            try{
+                const {data}=await api('GET','/dashboard/');
+                document.getElementById('totalProjects').textContent=data.total_workflows||0;
+                document.getElementById('totalExecutions').textContent=data.running_jobs||0;
+                document.getElementById('completedExecutions').textContent=data.completed_jobs||0;
+                const pendEl=document.getElementById('pendingApprovals');
+                try{
+                    const a=await api('GET','/approvals?status=pending');
+                    const count=a.data?Array.isArray(a.data)?a.data.length:0:0;
+                    pendEl.textContent=count;
+                }catch(e){pendEl.textContent='0'}
 
-                const activityEl = document.getElementById('recentActivity');
-                if (data.recent_activity && data.recent_activity.length > 0) {
-                    activityEl.innerHTML = '<div class="activity-list">' +
-                        data.recent_activity.map(a => `
+                const activityEl=document.getElementById('recentActivity');
+                if(data.recent_activity&&data.recent_activity.length>0){
+                    activityEl.innerHTML='<div class="activity-list">'+
+                        data.recent_activity.map(a=>`
                             <div class="activity-item">
-                                <div class="activity-dot ${a.level}"></div>
+                                <div class="activity-dot ${a.level||'info'}"></div>
                                 <div>
                                     <div class="activity-text">${a.message}</div>
-                                    <div class="activity-time">${new Date(a.timestamp).toLocaleString()}</div>
+                                    <div class="activity-time">${a.timestamp?new Date(a.timestamp).toLocaleString():''}</div>
                                 </div>
                             </div>
-                        `).join('') +
-                    '</div>';
+                        `).join('')+'</div>';
                 }
-            } catch (e) {
-                showToast('Failed to load dashboard', 'error');
-            }
+            }catch(e){}
         }
 
-        // ===== Workspaces =====
-        async function loadWorkspaces() {
-            try {
-                const { data } = await api('GET', '/workspaces/');
-                WORKSPACES = data;
-                const list = document.getElementById('workspaceList');
-                if (data.length === 0) {
-                    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📁</div><p>No workspaces yet. Create your first one!</p></div>`;
+        // ===== Projects =====
+        async function loadProjects(){
+            try{
+                const {data}=await api('GET','/projects/');
+                await populateWorkspaceFilter('projectWorkspaceFilter');
+                const list=document.getElementById('projectList');
+                if(!data||data.length===0){
+                    list.innerHTML='<div class="empty-state"><div class="empty-state-icon">🎯</div><p>No projects yet.</p></div>';
                     return;
                 }
-                list.innerHTML = '<div class="item-list">' +
-                    data.map(w => `
-                        <div class="item-row">
-                            <div class="item-info">
-                                <div class="item-title">${w.name}</div>
-                                <div class="item-meta">Created ${new Date(w.created_at).toLocaleDateString()}</div>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn btn-sm btn-outline" onclick="viewWorkspaceWorkflows(${w.id})">View Workflows</button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteWorkspace(${w.id})">Delete</button>
+                list.innerHTML='<div class="item-list">'+data.map(p=>`
+                    <div class="item-row">
+                        <div class="item-info">
+                            <div class="item-title">${p.name}</div>
+                            <div class="item-meta">
+                                <span class="badge badge-${p.status||'draft'}">${p.status||'draft'}</span>
+                                <span>${p.project_type||''}</span>
                             </div>
                         </div>
-                    `).join('') +
-                '</div>';
-            } catch (e) {
-                showToast('Failed to load workspaces', 'error');
+                        <div class="item-actions">
+                            <button class="btn btn-sm btn-outline" onclick="viewProject(${p.id})">View</button>
+                            <button class="btn btn-sm btn-success" onclick="startExecution(${p.id})">▶ Run</button>
+                        </div>
+                    </div>
+                `).join('')+'</div>';
+            }catch(e){showToast('Failed to load projects','error')}
+        }
+
+        function showCreateProjectModal(){
+            const wsOpts=WORKSPACES.map(w=>`<option value="${w.id}">${w.name}</option>`).join('');
+            openModal('New Project',`
+                <div class="form-group">
+                    <label>Workspace</label>
+                    <select id="newProjectWs">${wsOpts||'<option value="">No workspaces</option>'}</select>
+                </div>
+                <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" id="newProjectName" placeholder="Upwork: Build E-commerce Platform">
+                </div>
+                <div class="form-group">
+                    <label>Project Type</label>
+                    <select id="newProjectType">
+                        <option value="upwork_opportunity">Upwork Opportunity</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="newProjectDesc" rows="2" placeholder="Brief description..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="createProject()">Create Project</button>
+            `);
+        }
+
+        async function createProject(){
+            const wsId=document.getElementById('newProjectWs').value;
+            const name=document.getElementById('newProjectName').value;
+            const type=document.getElementById('newProjectType').value;
+            const desc=document.getElementById('newProjectDesc').value;
+            if(!name||!wsId){showToast('Name and workspace are required','error');return}
+            try{
+                await api('POST','/projects/',{workspace_id:parseInt(wsId),name,project_type:type,description:desc});
+                closeModal();showToast('Project created!','success');loadProjects();
+            }catch(e){showToast(e.message,'error')}
+        }
+
+        async function viewProject(id){
+            try{
+                const {data}=await api('GET',`/projects/${id}`);
+                if(!data){showToast('Project not found','error');return}
+                let registryHtml='',sourcesHtml='',artifactsHtml='';
+                try{
+                    const r=await api('GET',`/projects/${id}/registry`);
+                    if(r.data&&r.data.length>0){
+                        registryHtml='<div class="form-group"><label>Ground Truth Registry</label><div class="item-list">'+
+                            r.data.slice(0,10).map(f=>`
+                                <div class="item-row" style="padding:8px 10px;font-size:12px">
+                                    <span style="font-weight:600;color:var(--accent-light)">${f.key}</span>
+                                    <span class="badge ${f.locked?'badge-completed':'badge-draft'}">${f.locked?'🔒 Locked':'🔓 Unlocked'}</span>
+                                </div>
+                            `).join('')+'</div></div>';
+                    }
+                }catch(e){}
+                try{
+                    const r=await api('GET',`/projects/${id}/artifacts`);
+                    if(r.data&&r.data.length>0){
+                        const final=r.data.filter(a=>a.is_final);
+                        artifactsHtml='<div class="form-group"><label>Artifacts</label><div class="item-list">'+
+                            final.slice(0,5).map(a=>`
+                                <div class="item-row" style="padding:8px 10px;font-size:12px">
+                                    <span>${a.name||a.artifact_type}</span>
+                                    <span class="badge badge-completed">✅ Final</span>
+                                </div>
+                            `).join('')+'</div></div>';
+                    }
+                }catch(e){}
+                openModal(`Project: ${data.name}`,`
+                    <div style="margin-bottom:12px">
+                        <span class="badge badge-${data.status||'draft'}">${data.status||'draft'}</span>
+                        <span style="color:var(--text-muted);font-size:12px;margin-left:8px">${data.project_type||''}</span>
+                    </div>
+                    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">${data.description||'No description'}</p>
+                    ${registryHtml}
+                    ${artifactsHtml}
+                    <div style="display:flex;gap:8px;margin-top:12px">
+                        <button class="btn btn-sm btn-primary" onclick="closeModal();startExecution(${id})">▶ Run Pipeline</button>
+                        <button class="btn btn-sm btn-outline" onclick="closeModal();showAddSourceModal(${id})">+ Add Source</button>
+                        <button class="btn btn-sm btn-outline" onclick="closeModal();viewExports(${id})">📤 Export</button>
+                    </div>
+                `);
+            }catch(e){showToast(e.message,'error')}
+        }
+
+        function showAddSourceModal(projectId){
+            openModal('Add Source Document',`
+                <div class="form-group">
+                    <label>Source Type</label>
+                    <select id="newSourceType">
+                        <option value="job_post">Job Post</option>
+                        <option value="client_metrics">Client Metrics</option>
+                        <option value="portfolio_item">Portfolio Item</option>
+                        <option value="project_brief">Project Brief</option>
+                        <option value="notes">Notes</option>
+                        <option value="generic_text">Generic Text</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="newSourceTitle" placeholder="Source title">
+                </div>
+                <div class="form-group">
+                    <label>Content</label>
+                    <textarea id="newSourceText" rows="6" placeholder="Paste the source content here..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="addSource(${projectId})">Add Source</button>
+            `);
+        }
+
+        async function addSource(projectId){
+            const type=document.getElementById('newSourceType').value;
+            const title=document.getElementById('newSourceTitle').value;
+            const text=document.getElementById('newSourceText').value;
+            if(!title||!text){showToast('Title and content are required','error');return}
+            try{
+                await api('POST',`/projects/${projectId}/sources`,{
+                    source_type:type,title,raw_text:text,structured_data:{}
+                });
+                closeModal();showToast('Source added!','success');
+            }catch(e){showToast(e.message,'error')}
+        }
+
+        async function startExecution(projectId){
+            try{
+                const {data}=await api('GET','/pipeline-templates/');
+                const templates=data&&data.length>0?data:[];
+                if(templates.length===0){
+                    showToast('No pipeline templates available. Run seed_demo first.','error');
+                    return;
+                }
+                const tplOpts=templates.map(t=>`<option value="${t.id}">${t.name} v${t.version||1}</option>`).join('');
+                openModal('Start Pipeline Execution',`
+                    <div class="form-group">
+                        <label>Pipeline Template</label>
+                        <select id="execTemplate">${tplOpts}</select>
+                    </div>
+                    <button class="btn btn-primary" onclick="runExecution(${projectId})">▶ Start Execution</button>
+                `);
+            }catch(e){showToast(e.message,'error')}
+        }
+
+        async function runExecution(projectId){
+            const templateId=document.getElementById('execTemplate').value;
+            if(!templateId){showToast('Select a template','error');return}
+            try{
+                await api('POST',`/projects/${projectId}/executions`,{pipeline_template_id:parseInt(templateId)});
+                closeModal();showToast('Execution queued! Run the worker to process.','success');
+            }catch(e){showToast(e.message,'error')}
+        }
+
+        async function viewExports(projectId){
+            openModal('Export Package',`
+                <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Download the decision package in your preferred format.</p>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                    <button class="btn btn-sm btn-primary" onclick="downloadExport(${projectId},'json')" style="width:auto;padding:10px 16px">📄 Export as JSON</button>
+                    <button class="btn btn-sm btn-outline" onclick="downloadExport(${projectId},'markdown')" style="width:auto;padding:10px 16px">📝 Export as Markdown</button>
+                    <button class="btn btn-sm btn-outline" onclick="downloadExport(${projectId},'proposal')" style="width:auto;padding:10px 16px">📋 Export as Plain Text</button>
+                </div>
+            `);
+        }
+
+        function downloadExport(projectId,format){
+            const token=TOKEN;
+            const url=`${API_BASE}/projects/${projectId}/exports?format=${format}`;
+            fetch(url,{headers:{Authorization:`Bearer ${token}`}})
+                .then(r=>r.blob())
+                .then(blob=>{
+                    const a=document.createElement('a');
+                    a.href=URL.createObjectURL(blob);
+                    const ext={json:'json',markdown:'md',proposal:'txt'}[format]||'txt';
+                    a.download=`signalforge-decision-${projectId}.${ext}`;
+                    a.click();
+                    URL.revokeObjectURL(a.href);
+                    showToast('Download started!','success');
+                })
+                .catch(()=>showToast('Failed to export','error'));
+        }
+
+        // ===== Providers =====
+        async function loadProviders(){
+            try{
+                const {data}=await api('GET','/providers/');
+                const list=document.getElementById('providerList');
+                if(!data||data.length===0){
+                    list.innerHTML='<div class="empty-state"><div class="empty-state-icon">🔌</div><p>No providers configured.</p></div>';
+                    return;
+                }
+                list.innerHTML='<div class="item-list">'+data.map(p=>`
+                    <div class="item-row">
+                        <div class="item-info">
+                            <div class="item-title">${p.name}</div>
+                            <div class="item-meta">
+                                <span>${p.provider_type}</span>
+                                <span>${p.masked_api_key||'🔑'}</span>
+                                <span>${p.default_model||''}</span>
+                                <span class="badge ${p.is_active?'badge-completed':'badge-draft'}">${p.is_active?'Active':'Inactive'}</span>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-sm btn-outline" onclick="testProvider(${p.id})">🔌 Test</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteProvider(${p.id})">Delete</button>
+                        </div>
+                    </div>
+                `).join('')+'</div>';
+            }catch(e){showToast('Failed to load providers','error')}
+        }
+
+        function showCreateProviderModal(){
+            openModal('Add Provider',`
+                <div class="form-group">
+                    <label>Provider Name</label>
+                    <input type="text" id="newProvName" placeholder="My OpenAI Gateway">
+                </div>
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="newProvType">
+                        <option value="openai_compatible">OpenAI Compatible</option>
+                        <option value="ollama">Ollama</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Base URL</label>
+                    <input type="text" id="newProvUrl" placeholder="http://localhost:20128/v1">
+                </div>
+                <div class="form-group">
+                    <label>API Key</label>
+                    <input type="password" id="newProvKey" placeholder="sk-... (leave empty for Ollama)">
+                </div>
+                <div class="form-group">
+                    <label>Default Model</label>
+                    <input type="text" id="newProvModel" placeholder="gpt-4o-mini">
+                </div>
+                <button class="btn btn-primary" onclick="createProvider()">Add Provider</button>
+            `);
+        }
+
+        async function createProvider(){
+            const name=document.getElementById('newProvName').value;
+            const type=document.getElementById('newProvType').value;
+            const url=document.getElementById('newProvUrl').value;
+            const key=document.getElementById('newProvKey').value;
+            const model=document.getElementById('newProvModel').value;
+            if(!name||!url){showToast('Name and URL are required','error');return}
+            try{
+                await api('POST','/providers/',{
+                    name,provider_type:type,base_url:url,
+                    api_key:key||undefined,
+                    default_model:model||undefined,
+                    timeout_seconds:120,is_active:true
+                });
+                closeModal();showToast('Provider added!','success');loadProviders();
+            }catch(e){showToast(e.message,'error')}
+        }
+
+        async function testProvider(id){
+            try{
+                const {data}=await api('POST',`/providers/${id}/test`);
+                showToast(data.success?'✅ Connection successful!':`❌ ${data.message}`,data.success?'success':'error');
+            }catch(e){showToast(e.message,'error')}
+        }
+
+        async function deleteProvider(id){
+            if(!confirm('Delete this provider?')) return;
+            try{await api('DELETE',`/providers/${id}`);showToast('Provider deleted','info');loadProviders()}
+            catch(e){showToast(e.message,'error')}
+        }
+
+        // ===== Agents =====
+        async function loadAgents(){
+            try{
+                const {data}=await api('GET','/agents/');
+                const list=document.getElementById('agentList');
+                if(!data||data.length===0){
+                    list.innerHTML='<div class="empty-state"><div class="empty-state-icon">🤖</div><p>No agents defined.</p></div>';
+                    return;
+                }
+                list.innerHTML='<div class="item-list">'+data.map(a=>`
+                    <div class="item-row">
+                        <div class="item-info">
+                            <div class="item-title">${a.name}</div>
+                            <div class="item-meta">
+                                <span>${a.slug}</span>
+                                <span>v${a.version||1}</span>
+                                <span class="badge ${a.is_active?'badge-completed':'badge-draft'}">${a.is_active?'Active':'Inactive'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')+'</div>';
+            }catch(e){showToast('Failed to load agents','error')}
+        }
+
+        function showCreateAgentModal(){
+            openModal('New Agent','<p style="color:var(--text-muted)">Agent creation form (requires provider setup first).</p>');
+        }
+
+        // ===== Templates =====
+        async function loadTemplates(){
+            try{
+                const {data}=await api('GET','/pipeline-templates/');
+                const list=document.getElementById('templateList');
+                if(!data||data.length===0){
+                    list.innerHTML='<div class="empty-state"><div class="empty-state-icon">📋</div><p>No templates available. Run <code style="background:var(--bg-input);padding:2px 6px;border-radius:4px">python -m app.seed_demo</code> to create demo templates.</p></div>';
+                    return;
+                }
+                list.innerHTML='<div class="item-list">'+data.map(t=>`
+                    <div class="item-row">
+                        <div class="item-info">
+                            <div class="item-title">${t.name}</div>
+                            <div class="item-meta">
+                                <span>v${t.version||1}</span>
+                                ${t.description?`<span>${t.description}</span>`:''}
+                                <span class="badge ${t.is_system?'badge-completed':'badge-draft'}">${t.is_system?'System':'Custom'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')+'</div>';
+            }catch(e){showToast('Failed to load templates','error')}
+        }
+
+        // ===== Executions =====
+        async function loadExecutions(){
+            try{
+                const {data}=await api('GET','/executions/');
+                const list=document.getElementById('executionList');
+                if(!data||data.length===0){
+                    list.innerHTML='<div class="empty-state"><div class="empty-state-icon">🔄</div><p>No executions yet. Start a pipeline run from a project.</p></div>';
+                    return;
+                }
+                list.innerHTML='<div class="item-list">'+data.map(e=>`
+                    <div class="item-row" onclick="viewExecution(${e.id})" style="cursor:pointer">
+                        <div class="item-info">
+                            <div class="item-title">Execution #${e.id}</div>
+                            <div class="item-meta">
+                                <span class="badge badge-${(e.status||'').replace(/[^a-z_]/g,'')}">${e.status||'unknown'}</span>
+                                <span>Project: ${e.project_id}</span>
+                                ${e.created_at?`<span>${new Date(e.created_at).toLocaleString()}</span>`:''}
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            ${e.status==='running'||e.status==='queued'?`<button class="btn btn-sm btn-danger" onclick="event.stopPropagation();cancelExecution(${e.id})">Cancel</button>`:''}
+                        </div>
+                    </div>
+                `).join('')+'</div>';
+            }catch(e){showToast('Failed to load executions','error')}
+        }
+
+        async function viewExecution(id){
+            try{
+                const {data}=await api('GET',`/executions/${id}`);
+                let nodesHtml='';
+                try{
+                    const n=await api('GET',`/executions/${id}/nodes`);
+                    if(n.data&&n.data.length>0){
+                        nodesHtml='<div class="form-group"><label>Execution Nodes</label><div class="node-list">'+
+                            n.data.map(nd=>`
+                                <div class="node-item">
+                                    <span class="node-key">${nd.node_key}</span>
+                                    <span class="node-type">${nd.node_type}</span>
+                                    <span class="badge badge-${nd.status||'pending'}">${nd.status||'pending'}</span>
+                                    ${nd.duration_ms?`<span class="node-duration">${nd.duration_ms}ms</span>`:''}
+                                </div>
+                            `).join('')+'</div></div>';
+                    }
+                }catch(e){}
+                openModal(`Execution #${id}`,`
+                    <div style="margin-bottom:12px">
+                        <span class="badge badge-${(data.status||'').replace(/[^a-z_]/g,'')}">${data.status||'unknown'}</span>
+                        ${data.error_message?`<p style="color:var(--error);margin-top:8px;font-size:13px">${data.error_message}</p>`:''}
+                    </div>
+                    <div class="form-group"><label>Details</label>
+                        <div style="font-size:13px;color:var(--text-secondary)">
+                            <div>Project: ${data.project_id}</div>
+                            <div>Template: ${data.pipeline_template_id}</div>
+                            ${data.started_at?`<div>Started: ${new Date(data.started_at).toLocaleString()}</div>`:''}
+                            ${data.finished_at?`<div>Finished: ${new Date(data.finished_at).toLocaleString()}</div>`:''}
+                        </div>
+                    </div>
+                    ${nodesHtml}
+                    ${data.status==='awaiting_approval'?`<button class="btn btn-sm btn-success" onclick="closeModal();navigateTo('approvals')" style="margin-top:8px">✅ Review in Approvals</button>`:''}
+                `);
+            }catch(e){showToast(e.message,'error')}
+        }
+
+        async function cancelExecution(id){
+            if(!confirm('Cancel this execution?')) return;
+            try{await api('POST',`/executions/${id}/cancel`);showToast('Execution cancelled','info');loadExecutions()}
+            catch(e){showToast(e.message,'error')}
+        }
+
+        // ===== Approvals =====
+        function switchApprovalTab(tab){
+            APPROVAL_MODE=tab;
+            document.querySelectorAll('#pageApprovals .tab').forEach(t=>t.classList.remove('active'));
+            document.querySelectorAll('#pageApprovals .tab')[tab==='pending'?0:1].classList.add('active');
+            document.getElementById('approvalTitle').textContent=tab==='pending'?'Pending Approvals':'Resolved Approvals';
+            loadApprovals();
+        }
+
+        async function loadApprovals(){
+            try{
+                const status=APPROVAL_MODE==='pending'?'pending':undefined;
+                const {data}=await api('GET',`/approvals/${status?'?status='+status:''}`);
+                const list=document.getElementById('approvalList');
+                if(!data||data.length===0){
+                    list.innerHTML=`<div class="empty-state"><div class="empty-state-icon">✅</div><p>No ${APPROVAL_MODE} approvals</p></div>`;
+                    document.getElementById('approvalBadge').style.display='none';
+                    return;
+                }
+                const pendingCount=data.filter(a=>a.status==='pending').length;
+                const badge=document.getElementById('approvalBadge');
+                if(pendingCount>0){badge.textContent=pendingCount;badge.style.display='inline'}
+                else badge.style.display='none';
+
+                list.innerHTML='<div class="item-list">'+data.map(a=>`
+                    <div class="item-row" style="cursor:pointer" onclick="resolveApproval(${a.id},'${a.status}')">
+                        <div class="item-info">
+                            <div class="item-title">Approval #${a.id}</div>
+                            <div class="item-meta">
+                                <span class="badge badge-${a.status||'pending'}">${a.status||'pending'}</span>
+                                <span>Execution: ${a.execution_id}</span>
+                                ${a.created_at?`<span>${new Date(a.created_at).toLocaleString()}</span>`:''}
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            ${a.status==='pending'?`
+                                <button class="btn btn-sm btn-success" onclick="event.stopPropagation();resolveApproval(${a.id},'approved')">✅ Approve</button>
+                                <button class="btn btn-sm btn-danger" onclick="event.stopPropagation();resolveApproval(${a.id},'rejected')">❌ Reject</button>
+                            `:''}
+                        </div>
+                    </div>
+                `).join('')+'</div>';
+
+                if(APPROVAL_MODE==='pending'&&pendingCount>0){
+                    showToast(`${pendingCount} pending approval${pendingCount>1?'s':''} awaiting review`,'info');
+                }
+            }catch(e){showToast('Failed to load approvals','error')}
+        }
+
+        async function resolveApproval(id,decision){
+            if(decision==='approved'||decision==='rejected'){
+                if(!confirm(`${decision==='approved'?'Approve':'Reject'} this approval?`)) return;
+                try{
+                    await api('POST',`/approvals/${id}/resolve`,{decision,comment:''});
+                    showToast(`Approval ${decision}!`,'success');
+                    loadApprovals();
+                }catch(e){showToast(e.message,'error')}
+            }else{
+                try{
+                    const {data}=await api('GET',`/approvals/${id}`);
+                    openModal(`Approval #${id}`,`
+                        <div style="margin-bottom:12px">
+                            <span class="badge badge-${data.status||'pending'}">${data.status||'pending'}</span>
+                        </div>
+                        <div class="form-group"><label>Prompt</label>
+                            <div class="json-display">${data.prompt||'No prompt'}</div>
+                        </div>
+                        ${data.comment?`<div class="form-group"><label>Comment</label><p style="font-size:13px">${data.comment}</p></div>`:''}
+                        ${data.status==='pending'?`
+                            <div class="form-group"><label>Your Decision</label>
+                                <select id="resolveDecision">
+                                    <option value="approved">✅ Approve</option>
+                                    <option value="rejected">❌ Reject</option>
+                                    <option value="changes_requested">📝 Request Changes</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>Comment (optional)</label>
+                                <textarea id="resolveComment" rows="2" placeholder="Reason for your decision..."></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="submitResolution(${id})">Submit Decision</button>
+                        `:''}
+                    `);
+                }catch(e){showToast(e.message,'error')}
             }
         }
 
-        function showCreateWorkspaceModal() {
-            openModal('Create Workspace', `
-                <div class="form-group">
-                    <label>Workspace Name</label>
-                    <input type="text" id="newWorkspaceName" placeholder="My AI Workspace">
+        async function submitResolution(id){
+            const decision=document.getElementById('resolveDecision').value;
+            const comment=document.getElementById('resolveComment').value;
+            try{
+                await api('POST',`/approvals/${id}/resolve`,{decision,comment});
+                closeModal();showToast(`Resolution submitted: ${decision}`,'success');
+                loadApprovals();
+            }catch(e){showToast(e.message,'error')}
+        }
+
+        // ===== Workspace Dropdown Helper =====
+        async function loadWorkspaceDropdown(page){
+            try{
+                const {data}=await api('GET','/workspaces/');
+                WORKSPACES=data;
+                const prefix=page==='workflow'?'workflow':'job';
+                const select=document.getElementById(`${prefix}WorkspaceSelect`);
+                select.innerHTML='<option value="">-- Select a workspace --</option>'+
+                    data.map(w=>`<option value="${w.id}">${w.name}</option>`).join('');
+            }catch(e){}
+        }
+
+        async function populateWorkspaceFilter(id){
+            try{
+                const {data}=await api('GET','/workspaces/');
+                const select=document.getElementById(id);
+                if(select) select.innerHTML='<option value="">All Workspaces</option>'+
+                    data.map(w=>`<option value="${w.id}">${w.name}</option>`).join('');
+            }catch(e){}
+        }
+
+        // ===== Workspaces (Legacy) =====
+        async function loadWorkspaces(){
+            try{
+                const {data}=await api('GET','/workspaces/');
+                WORKSPACES=data;
+                const list=document.getElementById('workspaceList');
+                if(data.length===0){
+                    list.innerHTML='<div class="empty-state"><div class="empty-state-icon">📁</div><p>No workspaces yet.</p></div>';
+                    return;
+                }
+                list.innerHTML='<div class="item-list">'+data.map(w=>`
+                    <div class="item-row">
+                        <div class="item-info">
+                            <div class="item-title">${w.name}</div>
+                            <div class="item-meta">Created ${w.created_at?new Date(w.created_at).toLocaleDateString():''}</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-sm btn-outline" onclick="viewWorkspaceWorkflows(${w.id})">View Workflows</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteWorkspace(${w.id})">Delete</button>
+                        </div>
+                    </div>
+                `).join('')+'</div>';
+            }catch(e){showToast('Failed to load workspaces','error')}
+        }
+
+        function showCreateWorkspaceModal(){
+            openModal('Create Workspace',`
+                <div class="form-group"><label>Workspace Name</label>
+                    <input type="text" id="newWorkspaceName" placeholder="My SignalForge Workspace">
                 </div>
                 <button class="btn btn-primary" onclick="createWorkspace()">Create</button>
             `);
         }
 
-        async function createWorkspace() {
-            const name = document.getElementById('newWorkspaceName').value;
-            if (!name) { showToast('Name is required', 'error'); return; }
-            try {
-                await api('POST', '/workspaces/', { name });
-                closeModal();
-                showToast('Workspace created!', 'success');
-                await loadWorkspaces();
-                await loadSidebarData();
-            } catch (e) {
-                showToast(e.message, 'error');
-            }
+        async function createWorkspace(){
+            const name=document.getElementById('newWorkspaceName').value;
+            if(!name){showToast('Name is required','error');return}
+            try{await api('POST','/workspaces/',{name});closeModal();showToast('Workspace created!','success');loadWorkspaces();await loadSidebarData()}
+            catch(e){showToast(e.message,'error')}
         }
 
-        async function deleteWorkspace(id) {
-            if (!confirm('Delete this workspace? This will also delete all workflows and jobs inside.')) return;
-            try {
-                await api('DELETE', `/workspaces/${id}`);
-                showToast('Workspace deleted', 'info');
-                await loadWorkspaces();
-                await loadSidebarData();
-            } catch (e) {
-                showToast(e.message, 'error');
-            }
+        async function deleteWorkspace(id){
+            if(!confirm('Delete this workspace?')) return;
+            try{await api('DELETE',`/workspaces/${id}`);showToast('Workspace deleted','info');loadWorkspaces();await loadSidebarData()}
+            catch(e){showToast(e.message,'error')}
         }
 
-        function viewWorkspaceWorkflows(id) {
-            document.getElementById('workflowWorkspaceSelect').value = id;
+        function viewWorkspaceWorkflows(id){
+            document.getElementById('workflowWorkspaceSelect').value=id;
             navigateTo('workflows');
-            loadWorkflows();
         }
 
-        // ===== Workspace Dropdown Helper =====
-        async function loadWorkspaceDropdown(page) {
-            try {
-                const { data } = await api('GET', '/workspaces/');
-                WORKSPACES = data;
-                const prefix = page === 'workflow' ? 'workflow' : 'job';
-                const select = document.getElementById(`${prefix}WorkspaceSelect`);
-                select.innerHTML = '<option value="">-- Select a workspace --</option>' +
-                    data.map(w => `<option value="${w.id}">${w.name}</option>`).join('');
-
-                if (page === 'workflow') {
-                    document.getElementById('workflowList').innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚡</div><p>Select a workspace to view workflows</p></div>`;
-                } else {
-                    document.getElementById('jobWorkflowSelect').innerHTML = '<option value="">-- Select a workflow --</option>';
-                    document.getElementById('jobList').innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔄</div><p>Select a workspace and workflow to view jobs</p></div>`;
-                }
-            } catch (e) {}
-        }
-
-        // ===== Workflows =====
-        async function loadWorkflows() {
-            const wsId = document.getElementById('workflowWorkspaceSelect').value;
-            if (!wsId) return;
-            try {
-                const { data } = await api('GET', `/workspaces/${wsId}/workflows/`);
-                WORKFLOWS = data;
-                const list = document.getElementById('workflowList');
-                if (data.length === 0) {
-                    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚡</div><p>No workflows yet. Create one!</p></div>`;
-                    return;
-                }
-                list.innerHTML = '<div class="item-list">' +
-                    data.map(w => `
-                        <div class="item-row">
-                            <div class="item-info">
-                                <div class="item-title">${w.name}</div>
-                                <div class="item-meta">
-                                    <span class="badge badge-${w.status}">${w.status}</span>
-                                    ${w.description ? '&mdash; ' + w.description : ''}
-                                </div>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn btn-sm btn-outline" onclick="viewWorkflowJobs(${wsId}, ${w.id})">View Jobs</button>
-                                <button class="btn btn-sm btn-success" onclick="showCreateJobModalWith(${wsId}, ${w.id})">+ Job</button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteWorkflow(${wsId}, ${w.id})">Delete</button>
+        // ===== Workflows (Legacy) =====
+        async function loadWorkflows(){
+            const wsId=document.getElementById('workflowWorkspaceSelect').value;
+            if(!wsId) return;
+            try{
+                const {data}=await api('GET',`/workspaces/${wsId}/workflows/`);
+                const list=document.getElementById('workflowList');
+                if(data.length===0){list.innerHTML='<div class="empty-state"><div class="empty-state-icon">⚡</div><p>No workflows yet.</p></div>';return}
+                list.innerHTML='<div class="item-list">'+data.map(w=>`
+                    <div class="item-row">
+                        <div class="item-info">
+                            <div class="item-title">${w.name}</div>
+                            <div class="item-meta">
+                                <span class="badge badge-${w.status}">${w.status}</span>
+                                ${w.description?'&mdash; '+w.description:''}
                             </div>
                         </div>
-                    `).join('') +
-                '</div>';
-            } catch (e) {
-                showToast('Failed to load workflows', 'error');
-            }
+                        <div class="item-actions">
+                            <button class="btn btn-sm btn-outline" onclick="viewWorkflowJobs(${wsId},${w.id})">View Jobs</button>
+                            <button class="btn btn-sm btn-success" onclick="showCreateJobModalWith(${wsId},${w.id})">+ Job</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteWorkflow(${wsId},${w.id})">Delete</button>
+                        </div>
+                    </div>
+                `).join('')+'</div>';
+            }catch(e){showToast('Failed to load workflows','error')}
         }
 
-        function showCreateWorkflowModal() {
-            openModal('Create Workflow', `
-                <div class="form-group">
-                    <label>Workspace</label>
-                    <select id="createWorkflowWorkspace" style="width:100%;padding:10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:inherit;">
-                        ${WORKSPACES.map(w => `<option value="${w.id}">${w.name}</option>`).join('')}
-                    </select>
+        function showCreateWorkflowModal(){
+            openModal('Create Workflow',`
+                <div class="form-group"><label>Workspace</label>
+                    <select id="createWorkflowWorkspace">${WORKSPACES.map(w=>`<option value="${w.id}">${w.name}</option>`).join('')}</select>
                 </div>
-                <div class="form-group">
-                    <label>Workflow Name</label>
+                <div class="form-group"><label>Workflow Name</label>
                     <input type="text" id="newWorkflowName" placeholder="My AI Workflow">
                 </div>
-                <div class="form-group">
-                    <label>Description (optional)</label>
+                <div class="form-group"><label>Description</label>
                     <input type="text" id="newWorkflowDesc" placeholder="What does this workflow do?">
                 </div>
                 <button class="btn btn-primary" onclick="createWorkflow()">Create</button>
             `);
         }
 
-        async function createWorkflow() {
-            const wsId = document.getElementById('createWorkflowWorkspace').value;
-            const name = document.getElementById('newWorkflowName').value;
-            const desc = document.getElementById('newWorkflowDesc').value;
-            if (!name) { showToast('Name is required', 'error'); return; }
-            try {
-                await api('POST', `/workspaces/${wsId}/workflows/`, { name, description: desc });
-                closeModal();
-                showToast('Workflow created!', 'success');
-                document.getElementById('workflowWorkspaceSelect').value = wsId;
-                await loadWorkflows();
-            } catch (e) {
-                showToast(e.message, 'error');
-            }
+        async function createWorkflow(){
+            const wsId=document.getElementById('createWorkflowWorkspace').value;
+            const name=document.getElementById('newWorkflowName').value;
+            const desc=document.getElementById('newWorkflowDesc').value;
+            if(!name){showToast('Name is required','error');return}
+            try{await api('POST',`/workspaces/${wsId}/workflows/`,{name,description:desc});closeModal();showToast('Workflow created!','success');document.getElementById('workflowWorkspaceSelect').value=wsId;loadWorkflows()}
+            catch(e){showToast(e.message,'error')}
         }
 
-        async function deleteWorkflow(wsId, wfId) {
-            if (!confirm('Delete this workflow?')) return;
-            try {
-                await api('DELETE', `/workspaces/${wsId}/workflows/${wfId}`);
-                showToast('Workflow deleted', 'info');
-                await loadWorkflows();
-            } catch (e) {
-                showToast(e.message, 'error');
-            }
+        async function deleteWorkflow(wsId,wfId){
+            if(!confirm('Delete this workflow?')) return;
+            try{await api('DELETE',`/workspaces/${wsId}/workflows/${wfId}`);showToast('Workflow deleted','info');loadWorkflows()}
+            catch(e){showToast(e.message,'error')}
         }
 
-        function viewWorkflowJobs(wsId, wfId) {
-            document.getElementById('jobWorkspaceSelect').value = wsId;
+        function viewWorkflowJobs(wsId,wfId){
+            document.getElementById('jobWorkspaceSelect').value=wsId;
             navigateTo('jobs');
-            setTimeout(() => {
-                loadJobWorkflows();
-                setTimeout(() => {
-                    document.getElementById('jobWorkflowSelect').value = wfId;
-                    loadJobs();
-                }, 300);
-            }, 100);
+            setTimeout(()=>{loadJobWorkflows();setTimeout(()=>{document.getElementById('jobWorkflowSelect').value=wfId;loadJobs()},200)},100);
         }
 
-        // ===== Jobs =====
-        async function loadJobWorkflows() {
-            const wsId = document.getElementById('jobWorkspaceSelect').value;
-            const wfSelect = document.getElementById('jobWorkflowSelect');
-            if (!wsId) {
-                wfSelect.innerHTML = '<option value="">-- Select a workflow --</option>';
-                return;
-            }
-            try {
-                const { data } = await api('GET', `/workspaces/${wsId}/workflows/`);
-                wfSelect.innerHTML = '<option value="">-- Select a workflow --</option>' +
-                    data.map(w => `<option value="${w.id}">${w.name}</option>`).join('');
-                document.getElementById('jobList').innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔄</div><p>Select a workflow to view jobs</p></div>`;
-            } catch (e) {}
+        // ===== Jobs (Legacy) =====
+        async function loadJobWorkflows(){
+            const wsId=document.getElementById('jobWorkspaceSelect').value;
+            const wfSelect=document.getElementById('jobWorkflowSelect');
+            if(!wsId){wfSelect.innerHTML='<option value="">-- Select a workflow --</option>';return}
+            try{
+                const {data}=await api('GET',`/workspaces/${wsId}/workflows/`);
+                wfSelect.innerHTML='<option value="">-- Select a workflow --</option>'+data.map(w=>`<option value="${w.id}">${w.name}</option>`).join('');
+            }catch(e){}
         }
 
-        async function loadJobs() {
-            const wfId = document.getElementById('jobWorkflowSelect').value;
-            const wsId = document.getElementById('jobWorkspaceSelect').value;
-            if (!wfId || !wsId) return;
-
-            try {
-                const { data } = await api('GET', `/workflows/${wfId}/jobs/`);
-                const list = document.getElementById('jobList');
-                if (data.length === 0) {
-                    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔄</div><p>No jobs yet. Create one!</p></div>`;
-                    return;
-                }
-                list.innerHTML = '<div class="item-list">' +
-                    data.map(j => `
-                        <div class="item-row">
-                            <div class="item-info">
-                                <div class="item-title">${j.name}</div>
-                                <div class="item-meta">
-                                    <span class="badge badge-${j.status}">${j.status}</span>
-                                    ${j.error_message ? `<span style="color:var(--error)">${j.error_message}</span>` : ''}
-                                </div>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn btn-sm btn-success" onclick="executeJob(${wsId}, ${wfId}, ${j.id})" ${j.status === 'completed' || j.status === 'running' ? 'disabled' : ''}>▶ Execute</button>
-                                <button class="btn btn-sm btn-outline" onclick="viewJobLogs(${j.id})">📋 Logs</button>
+        async function loadJobs(){
+            const wfId=document.getElementById('jobWorkflowSelect').value;
+            const wsId=document.getElementById('jobWorkspaceSelect').value;
+            if(!wfId||!wsId) return;
+            try{
+                const {data}=await api('GET',`/workflows/${wfId}/jobs/`);
+                const list=document.getElementById('jobList');
+                if(data.length===0){list.innerHTML='<div class="empty-state"><div class="empty-state-icon">🔄</div><p>No jobs yet.</p></div>';return}
+                list.innerHTML='<div class="item-list">'+data.map(j=>`
+                    <div class="item-row">
+                        <div class="item-info">
+                            <div class="item-title">${j.name}</div>
+                            <div class="item-meta">
+                                <span class="badge badge-${j.status}">${j.status}</span>
+                                ${j.error_message?`<span style="color:var(--error)">${j.error_message}</span>`:''}
                             </div>
                         </div>
-                    `).join('') +
-                '</div>';
-            } catch (e) {
-                showToast('Failed to load jobs', 'error');
-            }
+                        <div class="item-actions">
+                            <button class="btn btn-sm btn-success" onclick="executeJob(${wsId},${wfId},${j.id})" ${j.status==='completed'||j.status==='running'?'disabled':''}>▶ Execute</button>
+                            <button class="btn btn-sm btn-outline" onclick="viewJobLogs(${j.id})">📋 Logs</button>
+                        </div>
+                    </div>
+                `).join('')+'</div>';
+            }catch(e){showToast('Failed to load jobs','error')}
         }
 
-        function showCreateJobModal() {
-            const wsId = document.getElementById('jobWorkspaceSelect').value;
-            const wfId = document.getElementById('jobWorkflowSelect').value;
-            if (!wsId || !wfId) {
-                showToast('Please select a workspace and workflow first', 'error');
-                return;
-            }
-            openModal('Create Job', `
-                <div class="form-group">
-                    <label>Job Name</label>
+        function showCreateJobModal(){
+            const wsId=document.getElementById('jobWorkspaceSelect').value;
+            const wfId=document.getElementById('jobWorkflowSelect').value;
+            if(!wsId||!wfId){showToast('Please select a workspace and workflow first','error');return}
+            openModal('Create Job',`
+                <div class="form-group"><label>Job Name</label>
                     <input type="text" id="newJobName" placeholder="AI Data Processing Job">
                 </div>
-                <div class="form-group">
-                    <label>Input Data (JSON)</label>
-                    <textarea id="newJobInput" rows="4" style="width:100%;padding:10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:monospace;font-size:13px;">{"text": "hello world"}</textarea>
+                <div class="form-group"><label>Input Data (JSON)</label>
+                    <textarea id="newJobInput" rows="4">{"text":"hello world"}</textarea>
                 </div>
-                <button class="btn btn-primary" onclick="createJob(${wsId}, ${wfId})">Create</button>
+                <button class="btn btn-primary" onclick="createJob(${wsId},${wfId})">Create</button>
             `);
         }
 
-        function showCreateJobModalWith(wsId, wfId) {
-            document.getElementById('jobWorkspaceSelect').value = wsId;
-            setTimeout(() => {
-                loadJobWorkflows();
-                setTimeout(() => {
-                    document.getElementById('jobWorkflowSelect').value = wfId;
-                    showCreateJobModal();
-                }, 300);
-            }, 100);
+        function showCreateJobModalWith(wsId,wfId){
+            document.getElementById('jobWorkspaceSelect').value=wsId;
+            setTimeout(()=>{loadJobWorkflows();setTimeout(()=>{document.getElementById('jobWorkflowSelect').value=wfId;showCreateJobModal()},200)},100);
         }
 
-        async function createJob(wsId, wfId) {
-            const name = document.getElementById('newJobName').value;
-            const inputRaw = document.getElementById('newJobInput').value;
-            if (!name) { showToast('Name is required', 'error'); return; }
-            let inputData = {};
-            try {
-                inputData = JSON.parse(inputRaw || '{}');
-            } catch (e) {
-                showToast('Invalid JSON in input data', 'error');
-                return;
-            }
-            try {
-                await api('POST', `/workflows/${wfId}/jobs/`, { name, input_data: inputData });
-                closeModal();
-                showToast('Job created!', 'success');
-                await loadJobs();
-            } catch (e) {
-                showToast(e.message, 'error');
-            }
+        async function createJob(wsId,wfId){
+            const name=document.getElementById('newJobName').value;
+            const inputRaw=document.getElementById('newJobInput').value;
+            if(!name){showToast('Name is required','error');return}
+            let inputData={};
+            try{inputData=JSON.parse(inputRaw||'{}')}catch(e){showToast('Invalid JSON','error');return}
+            try{await api('POST',`/workflows/${wfId}/jobs/`,{name,input_data:inputData});closeModal();showToast('Job created!','success');loadJobs()}
+            catch(e){showToast(e.message,'error')}
         }
 
-        async function executeJob(wsId, wfId, jobId) {
-            try {
-                const { data } = await api('POST', `/workflows/${wfId}/jobs/${jobId}/execute`);
-                const job = data.job;
-                const logs = data.logs;
-
-                let statusColor = job.status === 'completed' ? 'var(--success)' : 'var(--error)';
-                showToast(`Job ${job.status}!`, job.status === 'completed' ? 'success' : 'error');
-
-                await loadJobs();
-
-                // Show execution result
-                openModal(`Job Result: ${job.name}`, `
-                    <div style="margin-bottom:16px;">
-                        <span class="badge badge-${job.status}">${job.status}</span>
-                        ${job.error_message ? `<p style="color:var(--error);margin-top:8px;">${job.error_message}</p>` : ''}
+        async function executeJob(wsId,wfId,jobId){
+            try{
+                const {data}=await api('POST',`/workflows/${wfId}/jobs/${jobId}/execute`);
+                const job=data.job;
+                const logs=data.logs||[];
+                showToast(`Job ${job.status}!`,job.status==='completed'?'success':'error');
+                loadJobs();
+                openModal(`Job Result: ${job.name}`,`
+                    <div style="margin-bottom:12px"><span class="badge badge-${job.status}">${job.status}</span>
+                    ${job.error_message?`<p style="color:var(--error);margin-top:8px">${job.error_message}</p>`:''}</div>
+                    <div class="form-group"><label>Output</label>
+                        <div class="json-display">${JSON.stringify(job.output_data||{},null,2)}</div>
                     </div>
-                    <div class="form-group">
-                        <label>Output Data</label>
-                        <div class="json-display">${JSON.stringify(job.output_data || {}, null, 2)}</div>
-                    </div>
-                    <div class="form-group">
-                        <label>Execution Logs</label>
-                        <div style="max-height:300px;overflow-y:auto;">
-                            ${logs.map(l => `
-                                <div class="log-entry ${l.level}">
-                                    <span class="log-level ${l.level}">${l.level}</span>
-                                    ${l.message}
-                                    <span style="float:right;color:var(--text-muted);font-size:11px;">${new Date(l.timestamp).toLocaleTimeString()}</span>
-                                </div>
+                    <div class="form-group"><label>Logs</label>
+                        <div style="max-height:200px;overflow-y:auto">
+                            ${logs.map(l=>`<div class="log-entry ${l.level}"><span class="log-level ${l.level}">${l.level}</span>${l.message}
+                                <span style="float:right;color:var(--text-muted);font-size:10px">${l.timestamp?new Date(l.timestamp).toLocaleTimeString():''}</span></div>
                             `).join('')}
                         </div>
                     </div>
                 `);
-            } catch (e) {
-                showToast(e.message, 'error');
-            }
+            }catch(e){showToast(e.message,'error')}
         }
 
-        async function viewJobLogs(jobId) {
-            try {
-                const { data } = await api('GET', `/jobs/${jobId}/logs/`);
-                if (data.length === 0) {
-                    showToast('No logs for this job', 'info');
-                    return;
-                }
-                openModal('Job Logs', `
-                    <div style="max-height:400px;overflow-y:auto;">
-                        ${data.map(l => `
-                            <div class="log-entry ${l.level}">
-                                <span class="log-level ${l.level}">${l.level}</span>
-                                ${l.message}
-                                <span style="float:right;color:var(--text-muted);font-size:11px;">${new Date(l.timestamp).toLocaleTimeString()}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                `);
-            } catch (e) {
-                showToast('Failed to load logs', 'error');
-            }
+        async function viewJobLogs(jobId){
+            try{
+                const {data}=await api('GET',`/jobs/${jobId}/logs/`);
+                if(!data||data.length===0){showToast('No logs','info');return}
+                openModal('Job Logs',`<div style="max-height:300px;overflow-y:auto">${data.map(l=>
+                    `<div class="log-entry ${l.level}"><span class="log-level ${l.level}">${l.level}</span>${l.message}
+                    <span style="float:right;color:var(--text-muted);font-size:10px">${l.timestamp?new Date(l.timestamp).toLocaleTimeString():''}</span></div>`
+                ).join('')}</div>`);
+            }catch(e){showToast('Failed to load logs','error')}
         }
-
-        // ===== Toggle password visibility =====
-        document.querySelectorAll('input[type="password"]').forEach(el => {
-            const wrapper = document.createElement('div');
-            wrapper.style.position = 'relative';
-            el.parentNode.insertBefore(wrapper, el);
-            wrapper.appendChild(el);
-        });
 
         // Enter key support
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                if (document.getElementById('authPage').style.display !== 'none') {
-                    if (document.getElementById('loginForm').classList.contains('active')) {
-                        login();
-                    } else {
-                        register();
-                    }
-                }
+        document.addEventListener('keydown',function(e){
+            if(e.key==='Enter'&&document.getElementById('authPage').style.display!=='none'){
+                if(document.getElementById('loginForm').classList.contains('active')) login();
+                else register();
             }
         });
 
-        // ===== Init =====
-        (async function init() {
-            if (TOKEN) {
-                await loadUser();
-            }
+        // Init
+        (async function init(){
+            if(TOKEN) await loadUser();
         })();
     </script>
 </body>

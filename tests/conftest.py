@@ -3,6 +3,9 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
+# Import ALL models so Base.metadata discovers them
+import app.models  # noqa: F401
+
 from app.auth.models import User
 from app.auth.service import create_access_token, hash_password
 from app.database.database import Base, get_db
