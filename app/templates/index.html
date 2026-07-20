@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Workflow Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===== CSS Variables & Theme ===== */
+        :root {
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #12122a;
+            --bg-card: #1a1a3a;
+            --bg-card-hover: #22224a;
+            --bg-input: #16163a;
+            --border: #2a2a5a;
+            --border-hover: #3a3a7a;
+            --text-primary: #e8e8ff;
+            --text-secondary: #9898c8;
+            --text-muted: #6868a0;
+            --accent: #6c5ce7;
+            --accent-light: #8b7cf7;
+            --accent-glow: rgba(108, 92, 231, 0.3);
+            --success: #00d2a0;
+            --warning: #ffc048;
+            --error: #ff6b6b;
+            --info: #48b8ff;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ===== Scrollbar ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+        /* ===== Auth Page ===== */
+        .auth-page {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at top left, rgba(108, 92, 231, 0.1), transparent 50%),
+                        radial-gradient(ellipse at bottom right, rgba(0, 210, 160, 0.05), transparent 50%);
+            padding: 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 440px;
+            animation: fadeUp 0.6s ease;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-logo {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .auth-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-light), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            backdrop-filter: blur(20px);
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .auth-tab.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent-light);
+        }
+
+        .btn-danger {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--error);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+
+        .btn-danger:hover {
+            background: rgba(255, 107, 107, 0.25);
+        }
+
+        .btn-success {
+            background: rgba(0, 210, 160, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(0, 210, 160, 0.2);
+        }
+
+        .btn-success:hover {
+            background: rgba(0, 210, 160, 0.25);
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .success-msg {
+            color: var(--success);
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* ===== Dashboard Layout ===== */
+        .app-layout {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .app-layout.active {
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-logo {
+            font-size: 28px;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-light), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .nav-icon { font-size: 18px; }
+
+        .sidebar-footer {
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name { font-size: 14px; font-weight: 600; }
+        .user-email { font-size: 12px; color: var(--text-muted); }
+
+        .logout-btn {
+            padding: 6px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 18px;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover { color: var(--error); }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 32px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.3s ease; }
+
+        /* ===== Stats Cards ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stat-icon.blue { background: rgba(72, 184, 255, 0.15); }
+        .stat-icon.green { background: rgba(0, 210, 160, 0.15); }
+        .stat-icon.purple { background: rgba(108, 92, 231, 0.15); }
+        .stat-icon.red { background: rgba(255, 107, 107, 0.15); }
+
+        .stat-label { font-size: 13px; color: var(--text-muted); }
+        .stat-value { font-size: 28px; font-weight: 700; }
+
+        /* ===== Tables & Lists ===== */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .card-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+        .empty-state p { font-size: 14px; }
+
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .item-row:hover {
+            border-color: var(--border-hover);
+        }
+
+        .item-info { flex: 1; }
+        .item-title { font-size: 14px; font-weight: 500; }
+        .item-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+        .item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* ===== Status Badges ===== */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .badge-draft { background: rgba(104, 104, 160, 0.2); color: var(--text-muted); }
+        .badge-running { background: rgba(72, 184, 255, 0.15); color: var(--info); }
+        .badge-completed { background: rgba(0, 210, 160, 0.15); color: var(--success); }
+        .badge-failed { background: rgba(255, 107, 107, 0.15); color: var(--error); }
+        .badge-pending { background: rgba(255, 192, 72, 0.15); color: var(--warning); }
+
+        /* ===== Modal ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: fadeUp 0.3s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 { font-size: 18px; }
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .modal-close:hover { color: var(--text-primary); }
+
+        /* ===== Logs ===== */
+        .log-entry {
+            padding: 10px 12px;
+            border-left: 3px solid var(--border);
+            margin-bottom: 4px;
+            font-size: 13px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: var(--bg-input);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        .log-entry.info { border-left-color: var(--info); }
+        .log-entry.warning { border-left-color: var(--warning); }
+        .log-entry.error { border-left-color: var(--error); }
+
+        .log-level {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            margin-right: 8px;
+        }
+
+        .log-level.info { color: var(--info); }
+        .log-level.warning { color: var(--warning); }
+        .log-level.error { color: var(--error); }
+
+        /* ===== Toast ===== */
+        .toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 2000;
+            display: none;
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
+        }
+
+        .toast.success { background: rgba(0, 210, 160, 0.9); color: white; display: block; }
+        .toast.error { background: rgba(255, 107, 107, 0.9); color: white; display: block; }
+        .toast.info { background: rgba(72, 184, 255, 0.9); color: white; display: block; }
+
+        /* ===== Activity Timeline ===== */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+        }
+
+        .activity-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .activity-dot.info { background: var(--info); }
+        .activity-dot.warning { background: var(--warning); }
+        .activity-dot.error { background: var(--error); }
+
+        .activity-text { font-size: 13px; }
+        .activity-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+        /* ===== Animations ===== */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* ===== Loading Spinner ===== */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-top: 2px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; position: relative; }
+            .main-content { margin-left: 0; }
+            .app-layout.active { flex-direction: column; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .modal { padding: 20px; }
+        }
+
+        /* JSON display */
+        .json-display {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== Toast ===== -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ===== Modal ===== -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal" id="modalContent">
+            <div class="modal-header">
+                <h3 id="modalTitle">Modal</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- ===== Auth Page ===== -->
+    <div id="authPage" class="auth-page">
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="auth-logo">🤖</div>
+                <h1>AI Workflow Lab</h1>
+                <p>Create &amp; monitor AI workflows</p>
+            </div>
+            <div class="auth-card">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+                    <button class="auth-tab" onclick="switchAuthTab('register')">Register</button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form active">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+                    </div>
+                    <button class="btn btn-primary" onclick="login()">Sign In</button>
+                    <div id="loginError" class="error-msg"></div>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="auth-form">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="regUsername" placeholder="yourname" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="regPassword" placeholder="•••••••• (min 6 chars)" autocomplete="new-password">
+                    </div>
+                    <button class="btn btn-primary" onclick="register()">Create Account</button>
+                    <div id="registerError" class="error-msg"></div>
+                    <div id="registerSuccess" class="success-msg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== App Layout ===== -->
+    <div id="appLayout" class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">🤖</span>
+                <span class="sidebar-title">AI Workflow Lab</span>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" onclick="navigateTo('dashboard')">
+                    <span class="nav-icon">📊</span> Dashboard
+                </button>
+                <button class="nav-item" onclick="navigateTo('workspaces')">
+                    <span class="nav-icon">📁</span> Workspaces
+                </button>
+                <button class="nav-item" onclick="navigateTo('workflows')">
+                    <span class="nav-icon">⚡</span> Workflows
+                </button>
+                <button class="nav-item" onclick="navigateTo('jobs')">
+                    <span class="nav-icon">🔄</span> Jobs
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">User</div>
+                        <div class="user-email" id="userEmail">user@example.com</div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()" title="Logout">🚪</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="pageDashboard" class="page-section active">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
+                    <p>Overview of your AI workflow lab</p>
+                </div>
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Total Workflows</span>
+                            <div class="stat-icon purple">⚡</div>
+                        </div>
+                        <div class="stat-value" id="totalWorkflows">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Running Jobs</span>
+                            <div class="stat-icon blue">🔄</div>
+                        </div>
+                        <div class="stat-value" id="runningJobs">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Completed</span>
+                            <div class="stat-icon green">✅</div>
+                        </div>
+                        <div class="stat-value" id="completedJobs">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Failed</span>
+                            <div class="stat-icon red">❌</div>
+                        </div>
+                        <div class="stat-value" id="failedJobs">-</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Recent Activity</h3>
+                    </div>
+                    <div id="recentActivity">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <p>No activity yet. Create a workflow and run some jobs!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workspaces Page -->
+            <div id="pageWorkspaces" class="page-section">
+                <div class="page-header">
+                    <h2>Workspaces</h2>
+                    <p>Manage your workspaces</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>All Workspaces</h3>
+                        <button class="btn btn-primary btn-sm" onclick="showCreateWorkspaceModal()">+ New Workspace</button>
+                    </div>
+                    <div id="workspaceList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📁</div>
+                            <p>No workspaces yet. Create your first one!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workflows Page -->
+            <div id="pageWorkflows" class="page-section">
+                <div class="page-header">
+                    <h2>Workflows</h2>
+                    <p>Manage AI workflow pipelines</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Workflows</h3>
+                        <button class="btn btn-primary btn-sm" onclick="showCreateWorkflowModal()">+ New Workflow</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Select Workspace</label>
+                        <select id="workflowWorkspaceSelect" style="width:100%;padding:10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:inherit;" onchange="loadWorkflows()">
+                            <option value="">-- Select a workspace --</option>
+                        </select>
+                    </div>
+                    <div id="workflowList" style="margin-top:16px;">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">⚡</div>
+                            <p>Select a workspace to view workflows</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jobs Page -->
+            <div id="pageJobs" class="page-section">
+                <div class="page-header">
+                    <h2>Jobs</h2>
+                    <p>Execute and monitor AI workflow jobs</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Job Runs</h3>
+                        <button class="btn btn-primary btn-sm" onclick="showCreateJobModal()">+ New Job</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Select Workspace</label>
+                        <select id="jobWorkspaceSelect" style="width:100%;padding:10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:inherit;" onchange="loadJobWorkflows()">
+                            <option value="">-- Select a workspace --</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-top:12px;">
+                        <label>Select Workflow</label>
+                        <select id="jobWorkflowSelect" style="width:100%;padding:10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:inherit;" onchange="loadJobs()">
+                            <option value="">-- Select a workflow --</option>
+                        </select>
+                    </div>
+                    <div id="jobList" style="margin-top:16px;">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔄</div>
+                            <p>Select a workspace and workflow to view jobs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ===== State =====
+        let TOKEN = localStorage.getItem('token') || '';
+        let USER = null;
+        let WORKSPACES = [];
+        let WORKFLOWS = [];
+        let CURRENT_PAGE = 'dashboard';
+
+        // ===== API Helper =====
+        const API_BASE = '';
+
+        async function api(method, path, body = null) {
+            const opts = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            if (TOKEN) {
+                opts.headers['Authorization'] = `Bearer ${TOKEN}`;
+            }
+            if (body) {
+                opts.body = JSON.stringify(body);
+            }
+            const resp = await fetch(`${API_BASE}${path}`, opts);
+            const data = method === 'DELETE' || resp.status === 204 ? null : await resp.json();
+            if (!resp.ok && data && data.detail) {
+                throw new Error(typeof data.detail === 'string' ? data.detail : 'Request failed');
+            }
+            return { status: resp.status, data };
+        }
+
+        // ===== Toast =====
+        function showToast(msg, type = 'info') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = `toast ${type}`;
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 3000);
+        }
+
+        // ===== Modal =====
+        function openModal(title, html) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = html;
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // Close modal on overlay click
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ===== Auth =====
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            if (tab === 'login') {
+                document.querySelector('.auth-tab:first-child').classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                document.querySelector('.auth-tab:last-child').classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('registerError').style.display = 'none';
+            document.getElementById('registerSuccess').style.display = 'none';
+        }
+
+        async function register() {
+            const email = document.getElementById('regEmail').value;
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const errEl = document.getElementById('registerError');
+            const successEl = document.getElementById('registerSuccess');
+            errEl.style.display = 'none';
+            successEl.style.display = 'none';
+
+            if (!email || !username || !password) {
+                errEl.textContent = 'All fields are required';
+                errEl.style.display = 'block';
+                return;
+            }
+            if (password.length < 6) {
+                errEl.textContent = 'Password must be at least 6 characters';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            try {
+                await api('POST', '/auth/register', { email, username, password });
+                successEl.textContent = 'Account created! You can now login.';
+                successEl.style.display = 'block';
+                document.getElementById('loginEmail').value = email;
+                switchAuthTab('login');
+            } catch (e) {
+                errEl.textContent = e.message;
+                errEl.style.display = 'block';
+            }
+        }
+
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errEl = document.getElementById('loginError');
+            errEl.style.display = 'none';
+
+            if (!email || !password) {
+                errEl.textContent = 'Email and password are required';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            try {
+                const { data } = await api('POST', '/auth/login', { email, password });
+                TOKEN = data.access_token;
+                localStorage.setItem('token', TOKEN);
+                await loadUser();
+                showToast('Welcome back!', 'success');
+            } catch (e) {
+                errEl.textContent = e.message;
+                errEl.style.display = 'block';
+            }
+        }
+
+        function logout() {
+            TOKEN = '';
+            localStorage.removeItem('token');
+            USER = null;
+            document.getElementById('authPage').style.display = 'flex';
+            document.getElementById('appLayout').classList.remove('active');
+            showToast('Logged out', 'info');
+        }
+
+        async function loadUser() {
+            try {
+                const { data } = await api('GET', '/users/me');
+                USER = data;
+                document.getElementById('userName').textContent = data.username;
+                document.getElementById('userEmail').textContent = data.email;
+                document.getElementById('userAvatar').textContent = data.username.charAt(0).toUpperCase();
+                document.getElementById('authPage').style.display = 'none';
+                document.getElementById('appLayout').classList.add('active');
+                await loadDashboard();
+                await loadSidebarData();
+            } catch (e) {
+                logout();
+            }
+        }
+
+        // ===== Navigation =====
+        function navigateTo(page) {
+            CURRENT_PAGE = page;
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+
+            const navMap = { dashboard: 0, workspaces: 1, workflows: 2, jobs: 3 };
+            document.querySelectorAll('.nav-item')[navMap[page]].classList.add('active');
+            document.getElementById(`page${page.charAt(0).toUpperCase() + page.slice(1)}`).classList.add('active');
+
+            switch (page) {
+                case 'dashboard': loadDashboard(); break;
+                case 'workspaces': loadWorkspaces(); break;
+                case 'workflows': loadWorkspaceDropdown('workflow'); break;
+                case 'jobs': loadWorkspaceDropdown('job'); break;
+            }
+        }
+
+        // ===== Sidebar Data =====
+        async function loadSidebarData() {
+            try {
+                const { data } = await api('GET', '/workspaces/');
+                WORKSPACES = data;
+            } catch (e) {}
+        }
+
+        // ===== Dashboard =====
+        async function loadDashboard() {
+            try {
+                const { data } = await api('GET', '/dashboard/');
+                document.getElementById('totalWorkflows').textContent = data.total_workflows;
+                document.getElementById('runningJobs').textContent = data.running_jobs;
+                document.getElementById('completedJobs').textContent = data.completed_jobs;
+                document.getElementById('failedJobs').textContent = data.failed_jobs;
+
+                const activityEl = document.getElementById('recentActivity');
+                if (data.recent_activity && data.recent_activity.length > 0) {
+                    activityEl.innerHTML = '<div class="activity-list">' +
+                        data.recent_activity.map(a => `
+                            <div class="activity-item">
+                                <div class="activity-dot ${a.level}"></div>
+                                <div>
+                                    <div class="activity-text">${a.message}</div>
+                                    <div class="activity-time">${new Date(a.timestamp).toLocaleString()}</div>
+                                </div>
+                            </div>
+                        `).join('') +
+                    '</div>';
+                }
+            } catch (e) {
+                showToast('Failed to load dashboard', 'error');
+            }
+        }
+
+        // ===== Workspaces =====
+        async function loadWorkspaces() {
+            try {
+                const { data } = await api('GET', '/workspaces/');
+                WORKSPACES = data;
+                const list = document.getElementById('workspaceList');
+                if (data.length === 0) {
+                    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📁</div><p>No workspaces yet. Create your first one!</p></div>`;
+                    return;
+                }
+                list.innerHTML = '<div class="item-list">' +
+                    data.map(w => `
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div class="item-title">${w.name}</div>
+                                <div class="item-meta">Created ${new Date(w.created_at).toLocaleDateString()}</div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-sm btn-outline" onclick="viewWorkspaceWorkflows(${w.id})">View Workflows</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteWorkspace(${w.id})">Delete</button>
+                            </div>
+                        </div>
+                    `).join('') +
+                '</div>';
+            } catch (e) {
+                showToast('Failed to load workspaces', 'error');
+            }
+        }
+
+        function showCreateWorkspaceModal() {
+            openModal('Create Workspace', `
+                <div class="form-group">
+                    <label>Workspace Name</label>
+                    <input type="text" id="newWorkspaceName" placeholder="My AI Workspace">
+                </div>
+                <button class="btn btn-primary" onclick="createWorkspace()">Create</button>
+            `);
+        }
+
+        async function createWorkspace() {
+            const name = document.getElementById('newWorkspaceName').value;
+            if (!name) { showToast('Name is required', 'error'); return; }
+            try {
+                await api('POST', '/workspaces/', { name });
+                closeModal();
+                showToast('Workspace created!', 'success');
+                await loadWorkspaces();
+                await loadSidebarData();
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        async function deleteWorkspace(id) {
+            if (!confirm('Delete this workspace? This will also delete all workflows and jobs inside.')) return;
+            try {
+                await api('DELETE', `/workspaces/${id}`);
+                showToast('Workspace deleted', 'info');
+                await loadWorkspaces();
+                await loadSidebarData();
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        function viewWorkspaceWorkflows(id) {
+            document.getElementById('workflowWorkspaceSelect').value = id;
+            navigateTo('workflows');
+            loadWorkflows();
+        }
+
+        // ===== Workspace Dropdown Helper =====
+        async function loadWorkspaceDropdown(page) {
+            try {
+                const { data } = await api('GET', '/workspaces/');
+                WORKSPACES = data;
+                const prefix = page === 'workflow' ? 'workflow' : 'job';
+                const select = document.getElementById(`${prefix}WorkspaceSelect`);
+                select.innerHTML = '<option value="">-- Select a workspace --</option>' +
+                    data.map(w => `<option value="${w.id}">${w.name}</option>`).join('');
+
+                if (page === 'workflow') {
+                    document.getElementById('workflowList').innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚡</div><p>Select a workspace to view workflows</p></div>`;
+                } else {
+                    document.getElementById('jobWorkflowSelect').innerHTML = '<option value="">-- Select a workflow --</option>';
+                    document.getElementById('jobList').innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔄</div><p>Select a workspace and workflow to view jobs</p></div>`;
+                }
+            } catch (e) {}
+        }
+
+        // ===== Workflows =====
+        async function loadWorkflows() {
+            const wsId = document.getElementById('workflowWorkspaceSelect').value;
+            if (!wsId) return;
+            try {
+                const { data } = await api('GET', `/workspaces/${wsId}/workflows/`);
+                WORKFLOWS = data;
+                const list = document.getElementById('workflowList');
+                if (data.length === 0) {
+                    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚡</div><p>No workflows yet. Create one!</p></div>`;
+                    return;
+                }
+                list.innerHTML = '<div class="item-list">' +
+                    data.map(w => `
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div class="item-title">${w.name}</div>
+                                <div class="item-meta">
+                                    <span class="badge badge-${w.status}">${w.status}</span>
+                                    ${w.description ? '&mdash; ' + w.description : ''}
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-sm btn-outline" onclick="viewWorkflowJobs(${wsId}, ${w.id})">View Jobs</button>
+                                <button class="btn btn-sm btn-success" onclick="showCreateJobModalWith(${wsId}, ${w.id})">+ Job</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteWorkflow(${wsId}, ${w.id})">Delete</button>
+                            </div>
+                        </div>
+                    `).join('') +
+                '</div>';
+            } catch (e) {
+                showToast('Failed to load workflows', 'error');
+            }
+        }
+
+        function showCreateWorkflowModal() {
+            openModal('Create Workflow', `
+                <div class="form-group">
+                    <label>Workspace</label>
+                    <select id="createWorkflowWorkspace" style="width:100%;padding:10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:inherit;">
+                        ${WORKSPACES.map(w => `<option value="${w.id}">${w.name}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Workflow Name</label>
+                    <input type="text" id="newWorkflowName" placeholder="My AI Workflow">
+                </div>
+                <div class="form-group">
+                    <label>Description (optional)</label>
+                    <input type="text" id="newWorkflowDesc" placeholder="What does this workflow do?">
+                </div>
+                <button class="btn btn-primary" onclick="createWorkflow()">Create</button>
+            `);
+        }
+
+        async function createWorkflow() {
+            const wsId = document.getElementById('createWorkflowWorkspace').value;
+            const name = document.getElementById('newWorkflowName').value;
+            const desc = document.getElementById('newWorkflowDesc').value;
+            if (!name) { showToast('Name is required', 'error'); return; }
+            try {
+                await api('POST', `/workspaces/${wsId}/workflows/`, { name, description: desc });
+                closeModal();
+                showToast('Workflow created!', 'success');
+                document.getElementById('workflowWorkspaceSelect').value = wsId;
+                await loadWorkflows();
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        async function deleteWorkflow(wsId, wfId) {
+            if (!confirm('Delete this workflow?')) return;
+            try {
+                await api('DELETE', `/workspaces/${wsId}/workflows/${wfId}`);
+                showToast('Workflow deleted', 'info');
+                await loadWorkflows();
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        function viewWorkflowJobs(wsId, wfId) {
+            document.getElementById('jobWorkspaceSelect').value = wsId;
+            navigateTo('jobs');
+            setTimeout(() => {
+                loadJobWorkflows();
+                setTimeout(() => {
+                    document.getElementById('jobWorkflowSelect').value = wfId;
+                    loadJobs();
+                }, 300);
+            }, 100);
+        }
+
+        // ===== Jobs =====
+        async function loadJobWorkflows() {
+            const wsId = document.getElementById('jobWorkspaceSelect').value;
+            const wfSelect = document.getElementById('jobWorkflowSelect');
+            if (!wsId) {
+                wfSelect.innerHTML = '<option value="">-- Select a workflow --</option>';
+                return;
+            }
+            try {
+                const { data } = await api('GET', `/workspaces/${wsId}/workflows/`);
+                wfSelect.innerHTML = '<option value="">-- Select a workflow --</option>' +
+                    data.map(w => `<option value="${w.id}">${w.name}</option>`).join('');
+                document.getElementById('jobList').innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔄</div><p>Select a workflow to view jobs</p></div>`;
+            } catch (e) {}
+        }
+
+        async function loadJobs() {
+            const wfId = document.getElementById('jobWorkflowSelect').value;
+            const wsId = document.getElementById('jobWorkspaceSelect').value;
+            if (!wfId || !wsId) return;
+
+            try {
+                const { data } = await api('GET', `/workflows/${wfId}/jobs/`);
+                const list = document.getElementById('jobList');
+                if (data.length === 0) {
+                    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔄</div><p>No jobs yet. Create one!</p></div>`;
+                    return;
+                }
+                list.innerHTML = '<div class="item-list">' +
+                    data.map(j => `
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div class="item-title">${j.name}</div>
+                                <div class="item-meta">
+                                    <span class="badge badge-${j.status}">${j.status}</span>
+                                    ${j.error_message ? `<span style="color:var(--error)">${j.error_message}</span>` : ''}
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-sm btn-success" onclick="executeJob(${wsId}, ${wfId}, ${j.id})" ${j.status === 'completed' || j.status === 'running' ? 'disabled' : ''}>▶ Execute</button>
+                                <button class="btn btn-sm btn-outline" onclick="viewJobLogs(${j.id})">📋 Logs</button>
+                            </div>
+                        </div>
+                    `).join('') +
+                '</div>';
+            } catch (e) {
+                showToast('Failed to load jobs', 'error');
+            }
+        }
+
+        function showCreateJobModal() {
+            const wsId = document.getElementById('jobWorkspaceSelect').value;
+            const wfId = document.getElementById('jobWorkflowSelect').value;
+            if (!wsId || !wfId) {
+                showToast('Please select a workspace and workflow first', 'error');
+                return;
+            }
+            openModal('Create Job', `
+                <div class="form-group">
+                    <label>Job Name</label>
+                    <input type="text" id="newJobName" placeholder="AI Data Processing Job">
+                </div>
+                <div class="form-group">
+                    <label>Input Data (JSON)</label>
+                    <textarea id="newJobInput" rows="4" style="width:100%;padding:10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:monospace;font-size:13px;">{"text": "hello world"}</textarea>
+                </div>
+                <button class="btn btn-primary" onclick="createJob(${wsId}, ${wfId})">Create</button>
+            `);
+        }
+
+        function showCreateJobModalWith(wsId, wfId) {
+            document.getElementById('jobWorkspaceSelect').value = wsId;
+            setTimeout(() => {
+                loadJobWorkflows();
+                setTimeout(() => {
+                    document.getElementById('jobWorkflowSelect').value = wfId;
+                    showCreateJobModal();
+                }, 300);
+            }, 100);
+        }
+
+        async function createJob(wsId, wfId) {
+            const name = document.getElementById('newJobName').value;
+            const inputRaw = document.getElementById('newJobInput').value;
+            if (!name) { showToast('Name is required', 'error'); return; }
+            let inputData = {};
+            try {
+                inputData = JSON.parse(inputRaw || '{}');
+            } catch (e) {
+                showToast('Invalid JSON in input data', 'error');
+                return;
+            }
+            try {
+                await api('POST', `/workflows/${wfId}/jobs/`, { name, input_data: inputData });
+                closeModal();
+                showToast('Job created!', 'success');
+                await loadJobs();
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        async function executeJob(wsId, wfId, jobId) {
+            try {
+                const { data } = await api('POST', `/workflows/${wfId}/jobs/${jobId}/execute`);
+                const job = data.job;
+                const logs = data.logs;
+
+                let statusColor = job.status === 'completed' ? 'var(--success)' : 'var(--error)';
+                showToast(`Job ${job.status}!`, job.status === 'completed' ? 'success' : 'error');
+
+                await loadJobs();
+
+                // Show execution result
+                openModal(`Job Result: ${job.name}`, `
+                    <div style="margin-bottom:16px;">
+                        <span class="badge badge-${job.status}">${job.status}</span>
+                        ${job.error_message ? `<p style="color:var(--error);margin-top:8px;">${job.error_message}</p>` : ''}
+                    </div>
+                    <div class="form-group">
+                        <label>Output Data</label>
+                        <div class="json-display">${JSON.stringify(job.output_data || {}, null, 2)}</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Execution Logs</label>
+                        <div style="max-height:300px;overflow-y:auto;">
+                            ${logs.map(l => `
+                                <div class="log-entry ${l.level}">
+                                    <span class="log-level ${l.level}">${l.level}</span>
+                                    ${l.message}
+                                    <span style="float:right;color:var(--text-muted);font-size:11px;">${new Date(l.timestamp).toLocaleTimeString()}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `);
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        async function viewJobLogs(jobId) {
+            try {
+                const { data } = await api('GET', `/jobs/${jobId}/logs/`);
+                if (data.length === 0) {
+                    showToast('No logs for this job', 'info');
+                    return;
+                }
+                openModal('Job Logs', `
+                    <div style="max-height:400px;overflow-y:auto;">
+                        ${data.map(l => `
+                            <div class="log-entry ${l.level}">
+                                <span class="log-level ${l.level}">${l.level}</span>
+                                ${l.message}
+                                <span style="float:right;color:var(--text-muted);font-size:11px;">${new Date(l.timestamp).toLocaleTimeString()}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `);
+            } catch (e) {
+                showToast('Failed to load logs', 'error');
+            }
+        }
+
+        // ===== Toggle password visibility =====
+        document.querySelectorAll('input[type="password"]').forEach(el => {
+            const wrapper = document.createElement('div');
+            wrapper.style.position = 'relative';
+            el.parentNode.insertBefore(wrapper, el);
+            wrapper.appendChild(el);
+        });
+
+        // Enter key support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                if (document.getElementById('authPage').style.display !== 'none') {
+                    if (document.getElementById('loginForm').classList.contains('active')) {
+                        login();
+                    } else {
+                        register();
+                    }
+                }
+            }
+        });
+
+        // ===== Init =====
+        (async function init() {
+            if (TOKEN) {
+                await loadUser();
+            }
+        })();
+    </script>
+</body>
+</html>
