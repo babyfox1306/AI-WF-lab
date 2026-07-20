@@ -11,6 +11,9 @@ import json
 import logging
 from datetime import datetime, timezone
 
+# Import all models first so Base.metadata is populated before init_db()
+import app.models  # noqa: F401
+
 from app.auth.service import hash_password
 from app.auth.models import User
 from app.database.database import SessionLocal, init_db
@@ -241,7 +244,7 @@ Integrated with Shopify API for order lookups and inventory checks.""",
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(levelname)s: %(message)s")
     seed_demo()
-    print("\n✅ Demo data seeded successfully!")
+    print("\n[OK] Demo data seeded successfully!")
     print("   Login: demo@signalforge.io / demo123")
     print("   Start the API: uvicorn app.main:app --reload")
 
